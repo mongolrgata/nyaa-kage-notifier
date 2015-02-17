@@ -7,14 +7,13 @@
     "scripts": [
       "jquery-2.1.3.min.js",
       "background.js"
-    ],
-    "persistent": false
+    ]
   },
   "permissions": [
     "http://www.nyaa.se/",
-    "http://puush.me/",
     "alarms",
     "notifications",
-    "storage"
+    "storage",
+    "tabs"
   ]
 }
