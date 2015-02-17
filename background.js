@@ -25,7 +25,7 @@ function setAlarm() {
 
     chrome.alarms.create('checkUpdate', {
         when            : Date.now(),
-        periodInMinutes : 0.25 // Warning here
+        periodInMinutes : 1
     });
 
     chrome.alarms.onAlarm.addListener(function (alarm) {
@@ -70,6 +70,15 @@ function setAlarm() {
         chrome.tabs.create({
             url : notificationId
         });
+
+        // TODO I'm not sure about this
+        chrome.windows.getCurrent(function (window) {
+            var windowId = window['id'];
+
+            chrome.windows.update(windowId, {focused : true}, dummy);
+        });
+
+        chrome.notifications.clear(notificationId, dummy);
     });
 }
 
