@@ -3,6 +3,10 @@
   "name": "nyaa-kage-notifier",
   "description": "TODO",
   "version": "0.1",
+  "page_action": {
+    "default_icon": "38.png",
+    "default_title": "nyaa-kage-notifier"
+  },
   "background": {
     "scripts": [
       "jquery-2.1.3.min.js",
@@ -12,6 +16,7 @@
   "permissions": [
     "http://www.nyaa.se/",
     "alarms",
+    "declarativeContent",
     "notifications",
     "storage",
     "tabs"
