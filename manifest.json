@@ -4,7 +4,7 @@
   "description": "TODO",
   "version": "0.1",
   "page_action": {
-    "default_icon": "38.png",
+    "default_icon": "img/38.png",
     "default_title": "nyaa-kage-notifier"
   },
   "background": {
