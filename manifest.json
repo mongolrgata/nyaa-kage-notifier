@@ -11,6 +11,10 @@
     {
       "matches": ["http://www.fansubs.ru/*"],
       "js": ["sources/external/jquery-2.1.3.min.js", "myscript.js"]
+    },
+    {
+      "matches": ["http://www.nyaa.se/*"],
+      "js": ["sources/external/jquery-2.1.3.min.js"]
     }
   ],
   "background": {
@@ -22,7 +26,8 @@
   "permissions": [
     "http://www.nyaa.se/",
     "http://www.fansubs.ru/",
-    "declarativeContent"
+    "declarativeContent",
+    "storage"
   ],
-  "web_accessible_resources": ["images/38.png"]
+  "web_accessible_resources": ["*"]
 }
