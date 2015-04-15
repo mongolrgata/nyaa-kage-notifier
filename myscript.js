@@ -19,9 +19,9 @@
          }
 
          res.kage[$img.data('ololo')] = {
-            topStack: opop,
-            aname: aname,
-            trans: trans
+            topStack : opop,
+            aname    : aname,
+            trans    : trans
          };
 
          chrome.storage.local.set({kage : res.kage});

@@ -7,10 +7,17 @@
     "default_icon": "images/38.png",
     "default_title": "nyaa-kage-notifier"
   },
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
   "content_scripts": [
     {
       "matches": ["http://www.fansubs.ru/*"],
-      "js": ["sources/external/jquery-2.1.3.min.js", "myscript.js"]
+      "js": [
+        "sources/external/jquery-2.1.3.min.js",
+        "myscript.js"
+      ]
     },
     {
       "matches": ["http://www.nyaa.se/*"],
