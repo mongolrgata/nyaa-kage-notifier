@@ -4,43 +4,144 @@
     <meta charset="UTF-8">
     <title></title>
     <style>
+        * {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .center {
+            display: block;
+            margin: auto;
+        }
+
+        .nyaa .history div {
+            cursor: pointer;
+            padding: 2px;
+        }
+
+        .nyaa .history div:hover {
+            margin-left: 8px;
+            margin-right: -8px;
+        }
+
+        .nyaa .history div:hover::before {
+            content: "\2192";
+            margin-left: -10px;
+            width: 10px;
+            display: inline-block;
+            color: blue;
+        }
+
+        .kage .history div:nth-child(1) {
+            cursor: pointer;
+            color: blue;
+        }
+
+        .kage .history div:nth-child(1):hover {
+            color: #FF7033;
+            text-decoration: underline;
+        }
+
+        .kage .history div:nth-child(n+2) {
+            cursor: default;
+            color: gray;
+        }
+
         .author {
             color: red;
             font-size: 10px;
+            user-select: none;
+        }
+
+        .history {
+            margin-left: 32px;
+            font-size: 10px;
+            font-family: monospace;
+        }
+
+        .new::after {
+            content: "NEW!";
+            margin-left: 8px;
+            display: inline-block;
+            color: red;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .loaded {
+            color: gray;
         }
     </style>
     <script src="sources/external/jquery-2.1.3.min.js"></script>
 </head>
 <body>
+<button class='center update'>Обновить</button>
 <h1>Nyaa.se</h1>
 
 <div class='nyaa'>
-    <div>
-        <input type='checkbox'>
-        <span class='author'>HorrileSubs</span>
-        <span class='name'>Seakano</span>
+    <div class='record'>
+        <label>
+            <input checked title='active' type='checkbox'>
+            <span class='author'>HorrileSubs</span>
+            <span class='name'>Saekano</span>
+        </label>
+
+        <div class='history'>
+            <div class='new'>[HorribleSubs] Saekano - 12 [1080p].mkv</div>
+            <div class='loaded'>[HorribleSubs] Saekano - 11 [1080p].mkv</div>
+            <div>[HorribleSubs] Saekano - 10 [1080p].mkv</div>
+            <div>[HorribleSubs] Saekano - 09 [1080p].mkv</div>
+        </div>
     </div>
-    <div>
-        <input type='checkbox'>
-        <span class='name'>Fate Kaleid Liner Prisma Ilya 2wei</span>
+    <div class='record'>
+        <label>
+            <input type='checkbox'>
+            <span class='name'>Fate Kaleid Liner Prisma Ilya 2wei</span>
+        </label>
+
+        <div class='history'>
+            <div class='new loaded'>Fate/Kaleid liner PRISMA☆ILLYA 3rei!! 27 [Paitouch]</div>
+            <div>Fate/Kaleid liner PRISMA☆ILLYA 3rei!! 26 [Paitouch]</div>
+            <div class='loaded'>Fate/Kaleid liner PRISMA☆ILLYA 3rei!! 25 [Paitouch]</div>
+        </div>
     </div>
 </div>
 <h1>Kage Project</h1>
 
 <div class='kage'>
-    <div>
-        <input type='checkbox'>
-        <span class='author'>Heaven_</span>
-        <span class='name'>Plastic Memories</span>
+    <div class='record'>
+        <label>
+            <input type='checkbox'>
+            <span class='author'>Heaven_</span>
+            <span class='name'>Plastic Memories</span>
+        </label>
+
+        <div class='history'>
+            <div>ТВ 1-3</div>
+            <div>ТВ 1-2</div>
+        </div>
     </div>
-    <div>
-        <input type='checkbox'>
-        <span class='name'>Seakano</span>
+    <div class='record'>
+        <label>
+            <input checked type='checkbox'>
+            <span class='author'>eX_fr0sT</span>
+            <span class='name'>Teekyuu 4</span>
+        </label>
+
+        <div class='history'>
+            <div>ТВ 1</div>
+        </div>
     </div>
-    <div>
-        <input type='checkbox'>
-        <span class='author'>eX_fr0sT</span>
-        <span class='name'>Teekyuu 4</span>
+    <div class='record'>
+        <label>
+            <input type='checkbox'>
+            <span class='name'>Saekano</span>
+        </label>
+
+        <div class='history'>
+            <div class='new'>ТВ 1-12 + OVA + Спецвыпуск 1-6</div>
+            <div>ТВ 1-11 + Спецвыпуск 1-4</div>
+        </div>
     </div>
 </div>
 <!--<script src="sources/options.js"></script>-->
