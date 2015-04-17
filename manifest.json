@@ -13,17 +13,17 @@
   },
   "content_scripts": [
     {
-      "matches": ["http://www.fansubs.ru/*"],
-      "js": [
-        "sources/external/jquery-2.1.3.min.js",
-        "myscript.js"
-      ]
-    },
-    {
       "matches": ["http://www.nyaa.se/*"],
       "js": [
         "sources/external/jquery-2.1.3.min.js",
-        "mail.js"
+        "sources/nyaa.js"
+      ]
+    },
+    {
+      "matches": ["http://www.fansubs.ru/*"],
+      "js": [
+        "sources/external/jquery-2.1.3.min.js",
+        "sources/kage.js"
       ]
     }
   ],

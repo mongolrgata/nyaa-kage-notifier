@@ -1,31 +1,43 @@
-(function () {
-   var $body = $('body');
-   var $checkbox = $('<div/>').append($('<input type="checkbox">123'));
+var template =
+          '<div class="record">                ' + '\n' +
+          '    <label>                         ' + '\n' +
+          '        <input type="checkbox">     ' + '\n' +
+          '        <span class="author"></span>' + '\n' +
+          '        <span class="name"></span>  ' + '\n' +
+          '    </label>                        ' + '\n' +
+          '    <div class="history"></div>     ' + '\n' +
+          '</div>                              ' + '\n';
 
-   chrome.storage.local.get(null, function (res) {
-      $body.append($('<h1>Nyaa.se</h1>'));
+$(document).ready(function () {
+   var
+         $button = $('button.update'),
+         $nyaa = $('.nyaa'),
+         $kage = $('.kage'),
+         $dummy = $('<div/>');
 
-      if (res.nyaa) {
-         for (key in res.nyaa) {
-            $body.append($checkbox.clone().append(res.nyaa[key].aname + ' ', $('<span class="ololo">' + res.nyaa[key].topStack + '</span>')));
-         }
-      }
+   $button.click(function () {
+      $('body').append('TODO update');
+   });
 
-      $body.append($('<h1>Kage Project</h1>'));
+   chrome.storage.local.get(null, function (items) {
+      for (var key in items) {
+         if (items.hasOwnProperty(key)) {
+            var
+                  entry = items[key],
+                  $list = (function () {
+                     switch (entry.type) {
+                        case 'nyaa':
+                           return $nyaa;
+                        case 'kage':
+                           return $kage;
+                        default:
+                           return $dummy;
+                     }
+                  })();
 
-      if (res.kage) {
-         for (key in res.kage) {
-            var aname = res.kage[key].aname;
-            var link = key;
-
-            var last = res.kage[key].topStack;
-
-            var record = $('<div>' + aname + ' <span class="ololo">' + last + '</span></div>').addClass('linklink').click(function () {
-               window.location = link;
-            });
-
-            $body.append($checkbox.clone().append(record));
+            // TODO
+            $list.append($(template));
          }
       }
    });
-})();
+});

@@ -1,0 +1,72 @@
+* {
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+
+.center {
+    display: block;
+    margin: auto;
+}
+
+.author {
+    color: red;
+    font-size: 10px;
+    user-select: none;
+}
+
+.new::after {
+    content: "NEW!";
+    margin-left: 8px;
+    display: inline-block;
+    color: red;
+    font-weight: bold;
+    font-style: italic;
+}
+
+.history {
+    margin-left: 32px;
+    font-size: 10px;
+    font-family: monospace;
+}
+
+.nyaa .history div,
+.nyaa .history div:hover {
+    transition: margin 0.08s;
+}
+
+.nyaa .history div {
+    cursor: pointer;
+    padding: 2px;
+}
+
+.nyaa .history div:hover {
+    margin-left: 8px;
+    margin-right: -8px;
+}
+
+.nyaa .history div:hover::before {
+    content: "\2192";
+    margin-left: -10px;
+    width: 10px;
+    display: inline-block;
+    color: blue;
+}
+
+.kage .history div:nth-child(1) {
+    cursor: pointer;
+    color: blue;
+}
+
+.kage .history div:nth-child(1):hover {
+    color: #FF7033;
+    text-decoration: underline;
+}
+
+.kage .history div:nth-child(n+2) {
+    color: gray;
+}
+
+.loaded {
+    color: gray;
+}

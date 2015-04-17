@@ -5,7 +5,7 @@ chrome.runtime.onInstalled.addListener(function () {
             {
                 conditions : [
                     new chrome.declarativeContent.PageStateMatcher({
-                        pageUrl : {queryContains : 'term'}
+                        pageUrl : {queryContains : 'term'} // TODO доработать условие
                     })
                 ],
 
@@ -16,13 +16,15 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 chrome.pageAction.onClicked.addListener(function (tab) {
-    var lol = tab.url;
-
-    chrome.tabs.sendMessage(tab.id, lol);
+    chrome.tabs.sendMessage(tab.id, tab.url);
 });
 
-function ololo() {
-    chrome.storage.local.get(null, function (res) {
+function getAll(opop) {
+    chrome.storage.local.get(opop || null, function (res) {
         console.log(res);
     });
+}
+
+function clear() {
+    chrome.storage.local.clear();
 }
