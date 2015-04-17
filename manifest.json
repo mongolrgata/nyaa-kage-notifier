@@ -21,7 +21,10 @@
     },
     {
       "matches": ["http://www.nyaa.se/*"],
-      "js": ["sources/external/jquery-2.1.3.min.js"]
+      "js": [
+        "sources/external/jquery-2.1.3.min.js",
+        "mail.js"
+      ]
     }
   ],
   "background": {
