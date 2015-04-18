@@ -16,11 +16,11 @@ chrome.runtime.onMessage.addListener(function (message) {
             _loaded : false
         });
 
-        newEntry.insertHistoryEntry('' + Math.random(), historyEntry); // TODO key
+        newEntry.insertHistoryEntry($row.find('.tlistname').text().trim(), historyEntry);
     });
 
     var obj = {};
-    obj[message] = newEntry;
+    obj[document.URL] = newEntry;
 
     chrome.storage.local.set(obj);
 });

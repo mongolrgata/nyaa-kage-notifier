@@ -30,5 +30,5 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 chrome.pageAction.onClicked.addListener(function (tab) {
-    chrome.tabs.sendMessage(tab.id, tab.url); // TODO without message
+    chrome.tabs.sendMessage(tab.id, undefined);
 });

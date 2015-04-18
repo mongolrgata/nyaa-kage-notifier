@@ -86,10 +86,24 @@ WatchListEntry.prototype._getHistoryTitles = function _getHistoryTitles() {
  * @private
  */
 WatchListEntry.prototype._getCommonTitle = function _getCommonTitle() {
-    // TODO
     var titles = this._getHistoryTitles();
 
-    return titles[0];
+    if (titles.length == 0) {
+        return '';
+    }
+
+    var result = titles[0];
+
+    m: for (var i = 0, n = titles.length; i < n; ++i) {
+        for (var j = 0, m = Math.min(result.length, titles[i].length); j < m; ++j) {
+            if (result[j] != titles[i][j]) {
+                result = result.substring(0, j);
+                continue m;
+            }
+        }
+    }
+
+    return result;
 };
 
 /**
