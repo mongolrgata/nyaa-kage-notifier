@@ -1,29 +1,26 @@
 chrome.runtime.onMessage.addListener(function (message) {
-   var $rows = $('.tlist').find(".tlistrow");
-   var title0 = $($rows[0]).find('.tlistname').text().trim();
+    var $rows = $('.tlist').find(".tlistrow");
 
-   var id = message;
-   var newRec = {};
+    var newEntry = new WatchListEntry({
+        _type   : WatchListEntry.prototype.ENTRY_TYPE.NYAA,
+        _active : true
+    });
 
-   newRec.type = 'nyaa';
-   newRec.aname = /^(\[.*?])?(.*)/.exec(title0)[2] || "";
-   newRec.author = /^(\[.*?])?/.exec(title0)[0] || "";
-   newRec.isActive = true;
+    $rows.each(function (index, element) {
+        var $row = $(element);
 
-   newRec.history = {};
+        var historyEntry = new HistoryEntry({
+            _title  : $row.find('.tlistname').text().trim(),
+            _link   : $row.find('.tlistdownload a')[0].href,
+            _date   : '' + new Date(),
+            _loaded : false
+        });
 
-   $rows.each(function (index, element) {
-      var $row = $(element);
-      var title = $row.find('.tlistname').text().trim();
-      var elem = newRec.history[title] = {};
+        newEntry.insertHistoryEntry('' + Math.random(), historyEntry); // TODO key
+    });
 
-      elem.link = $row.find('.tlistdownload a')[0].href;
-      elem.isNew = true;
-      elem.isLoaded = false;
-   });
+    var obj = {};
+    obj[message] = newEntry;
 
-   var obj = {};
-   obj[id] = newRec;
-
-   chrome.storage.local.set(obj);
+    chrome.storage.local.set(obj);
 });

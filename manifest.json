@@ -1,41 +1,38 @@
 {
   "manifest_version": 2,
-  "name": "nyaa-kage-notifier",
+  "name": "Nyaa&Kage Notifier",
   "description": "TODO",
   "version": "0.2",
-  "page_action": {
-    "default_icon": "images/38.png",
-    "default_title": "nyaa-kage-notifier"
-  },
-  "options_ui": {
-    "page": "options.html",
-    "chrome_style": true
+  "background": {
+    "scripts": ["background.js"]
   },
   "content_scripts": [
     {
       "matches": ["http://www.nyaa.se/*"],
       "js": [
         "sources/external/jquery-2.1.3.min.js",
+        "sources/WatchListEntry/WatchListEntry.js",
         "sources/nyaa.js"
       ]
     },
     {
-      "matches": ["http://www.fansubs.ru/*"],
+      "matches": ["http://www.fansubs.ru/base.php?id=*"],
       "js": [
         "sources/external/jquery-2.1.3.min.js",
+        "sources/WatchListEntry/WatchListEntry.js",
         "sources/kage.js"
       ]
     }
   ],
-  "background": {
-    "scripts": [
-      "sources/external/jquery-2.1.3.min.js",
-      "background.js"
-    ]
+  "options_ui": {
+    "page": "options/options.html",
+    "chrome_style": true
+  },
+  "page_action": {
+    "default_icon": "images/icons/38.png",
+    "default_title": "Следить"
   },
   "permissions": [
-    "http://www.nyaa.se/",
-    "http://www.fansubs.ru/",
     "declarativeContent",
     "storage"
   ],

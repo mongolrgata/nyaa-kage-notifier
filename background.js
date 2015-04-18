@@ -1,3 +1,17 @@
+var debug = {
+    lastResult : undefined,
+
+    getStorage : function getNull() {
+        chrome.storage.local.get(null, function (res) {
+            console.log(debug.lastResult = res);
+        });
+    },
+
+    clearStorage : function clear() {
+        chrome.storage.local.clear();
+    }
+};
+
 // Some magic here... i dunno lol
 chrome.runtime.onInstalled.addListener(function () {
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
@@ -5,7 +19,7 @@ chrome.runtime.onInstalled.addListener(function () {
             {
                 conditions : [
                     new chrome.declarativeContent.PageStateMatcher({
-                        pageUrl : {queryContains : 'term'} // TODO доработать условие
+                        pageUrl : {queryContains : 'term'} // TODO change condition
                     })
                 ],
 
@@ -16,15 +30,5 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 chrome.pageAction.onClicked.addListener(function (tab) {
-    chrome.tabs.sendMessage(tab.id, tab.url);
+    chrome.tabs.sendMessage(tab.id, tab.url); // TODO without message
 });
-
-function getAll(opop) {
-    chrome.storage.local.get(opop || null, function (res) {
-        console.log(res);
-    });
-}
-
-function clear() {
-    chrome.storage.local.clear();
-}

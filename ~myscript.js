@@ -1,3 +1,5 @@
+// TODO delete
+
 (function () {
    var $button = $('input[alt="Скачать"]');
    var aname = $($('tr:contains("Альтернативные названия:")')[1]).parent().find('tr:first').text().trim();

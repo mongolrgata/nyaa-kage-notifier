@@ -1,3 +1,4 @@
-/**
- * Created by Администратор on 17.04.2015.
- */
+$(document).ready(function () {
+    // TODO
+    alert('TODO');
+});
