@@ -40,6 +40,14 @@ HistoryEntry.prototype.getLink = function getLink() {
 };
 
 /**
+ * @param {HistoryEntry} entry
+ * @returns {boolean}
+ */
+HistoryEntry.prototype.isEqual = function isEqual(entry) {
+    return this.getTitle() == entry.getTitle();
+};
+
+/**
  * @param obj
  * @constructor
  */
@@ -94,11 +102,11 @@ WatchListEntry.prototype._getCommonTitle = function _getCommonTitle() {
 
     var result = titles[0];
 
-    m: for (var i = 0, n = titles.length; i < n; ++i) {
+    for (var i = 0, n = titles.length; i < n; ++i) {
         for (var j = 0, m = Math.min(result.length, titles[i].length); j < m; ++j) {
-            if (result[j] != titles[i][j]) {
+            if (result[j] == '-' || result[j] != titles[i][j]) {
                 result = result.substring(0, j);
-                continue m;
+                break;
             }
         }
     }
@@ -172,9 +180,8 @@ WatchListEntry.prototype.getHistory = function getHistory() {
 };
 
 /**
- * @param {string} key
  * @param {HistoryEntry} historyEntry
  */
-WatchListEntry.prototype.insertHistoryEntry = function insertHistoryEntry(key, historyEntry) {
-    this._history[key] = historyEntry;
+WatchListEntry.prototype.insertHistoryEntry = function insertHistoryEntry(historyEntry) {
+    this._history[historyEntry.getTitle()] = historyEntry;
 };

@@ -12,7 +12,7 @@
 .author {
     color: red;
     font-size: 10px;
-    user-select: none;
+    vertical-align: top;
 }
 
 .new::after {

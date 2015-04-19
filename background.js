@@ -1,3 +1,4 @@
+//noinspection JSUnusedGlobalSymbols
 var debug = {
     lastResult : undefined,
 
@@ -30,5 +31,5 @@ chrome.runtime.onInstalled.addListener(function () {
 });
 
 chrome.pageAction.onClicked.addListener(function (tab) {
-    chrome.tabs.sendMessage(tab.id, undefined);
+    chrome.tabs.sendMessage(tab.id, {});
 });
