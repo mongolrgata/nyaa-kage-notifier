@@ -7,6 +7,7 @@ var HistoryEntry = function HistoryEntry(obj) {
     this._link = obj._link;
     this._date = obj._date;
     this._loaded = obj._loaded;
+    this._forceOld = obj._forceOld;
 };
 
 /**
@@ -29,7 +30,7 @@ HistoryEntry.prototype.wasLoaded = function wasLoaded() {
 HistoryEntry.prototype.isNew = function isNew() {
     var today = new Date();
 
-    return today.setDate(today.getDate() - 2) < Date.parse(this._date);
+    return !this._forceOld && (today.setDate(today.getDate() - 2) < Date.parse(this._date));
 };
 
 /**
@@ -37,6 +38,10 @@ HistoryEntry.prototype.isNew = function isNew() {
  */
 HistoryEntry.prototype.getLink = function getLink() {
     return this._link;
+};
+
+HistoryEntry.prototype.forceOld = function forceOld() {
+    return this._forceOld = true;
 };
 
 /**

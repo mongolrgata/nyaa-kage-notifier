@@ -5,11 +5,12 @@ var $template = $(
     '        <span class="author"></span>    ' + '\n' +
     '        <span class="anime-name"></span>' + '\n' +
     '    </label>                            ' + '\n' +
+    '    <span class="unnew"></span>         ' + '\n' +
     '    <div class="history"></div>         ' + '\n' +
     '</div>                                  '
 );
 
-function setIntervalArray(foo, delay, array) {
+function setIntervalArray(foo, delay, array, callback) {
     var cnt = 0;
 
     var intervalID = setInterval(
@@ -19,6 +20,7 @@ function setIntervalArray(foo, delay, array) {
             }
             else {
                 clearInterval(intervalID);
+                callback();
             }
         },
         delay
@@ -90,11 +92,13 @@ $(document).ready(function () {
         $button = $('button.update'),
         $nyaa   = $('.nyaa'),
         $kage   = $('.kage'),
-        $dummy  = $('<div/>');
+        $dummy  = $('<div/>'),
+        $load   = $('.my-pretty-load');
 
     $button.click(function () {
-        // TODO update active entries
         var links = [];
+
+        $load.removeClass('hidden');
 
         $('.entry').each(function (index, element) {
             var $element = $(element);
@@ -120,9 +124,17 @@ $(document).ready(function () {
                         break;
                 }
             });
-        }, 400, links);
+        }, 400, links, function () {
+            setTimeout(function () {
+                repaintWatchList();
+                $load.addClass('hidden');
+            }, 500);
+        });
     });
 
+    var repaintWatchList = function () {
+    $nyaa.empty();
+    $kage.empty();
     chrome.storage.local.get(null, function (items) {
         for (var key in items) {
             if (items.hasOwnProperty(key)) {
@@ -135,7 +147,29 @@ $(document).ready(function () {
                     $checkbox  = $entry.find('input[type="checkbox"]'),
                     $author    = $entry.find('.author'),
                     $animeName = $entry.find('.anime-name'),
-                    $history   = $entry.find('.history');
+                    $history   = $entry.find('.history'),
+                    $unnew     = $entry.find('.unnew').data('key', key).click(function () {
+                        var
+                            $button = $(this),
+                            key     = $button.data('key');
+
+                        chrome.storage.local.get(key, function (result) {
+                            var
+                                entry      = new WatchListEntry(result[key]),
+                                oldHistory = entry.getHistory();
+
+                            for (var i = 0, n = oldHistory.length; i < n; ++i) {
+                                oldHistory[i].forceOld();
+                            }
+
+                            var obj = {};
+                            obj[key] = entry;
+
+                            chrome.storage.local.set(obj);
+
+                            repaintWatchList();
+                        });
+                    });
 
                 $checkbox.attr('checked', entry.isActive());
                 $author.text(entry.getAuthor() || '<без автора>');
@@ -148,7 +182,6 @@ $(document).ready(function () {
                         .toggleClass('new', history[i].isNew())
                         .data('historyEntry', history[i])
                         .click(function () {
-                            // TODO click kage-type entry
                             window.location = $(this).data('historyEntry').getLink();
                         });
 
@@ -173,4 +206,7 @@ $(document).ready(function () {
             }
         }
     });
+    };
+
+    repaintWatchList();
 });
