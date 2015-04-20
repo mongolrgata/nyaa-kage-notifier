@@ -15,7 +15,9 @@ var debug = {
 
 // Some magic here... i dunno lol
 chrome.runtime.onInstalled.addListener(function () {
+    //noinspection JSUnresolvedVariable
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
+        //noinspection JSUnresolvedVariable,JSUnresolvedFunction
         chrome.declarativeContent.onPageChanged.addRules([
             {
                 conditions : [

@@ -109,7 +109,7 @@ WatchListEntry.prototype._getCommonTitle = function _getCommonTitle() {
 
     for (var i = 0, n = titles.length; i < n; ++i) {
         for (var j = 0, m = Math.min(result.length, titles[i].length); j < m; ++j) {
-            if (result[j] == '-' || result[j] != titles[i][j]) {
+            if (result[j] != titles[i][j]) {
                 result = result.substring(0, j);
                 break;
             }
@@ -157,7 +157,7 @@ WatchListEntry.prototype.getAnimeName = function getAnimeName() {
         case WatchListEntry.prototype.ENTRY_TYPE.NYAA:
             var commonTitle = this._getCommonTitle();
 
-            return /^(\[.*?])?(.*)/.exec(commonTitle)[2].trim();
+            return /^(\[.*?])?([^0-9]*)/.exec(commonTitle)[2].trim();
         case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
             return this._animeName;
         default:

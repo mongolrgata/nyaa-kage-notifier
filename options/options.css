@@ -65,6 +65,8 @@
 .nyaa .history div {
     cursor: pointer;
     padding: 2px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .nyaa .history div:hover {

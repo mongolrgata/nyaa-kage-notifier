@@ -147,8 +147,9 @@ $(document).ready(function () {
                     $checkbox  = $entry.find('input[type="checkbox"]'),
                     $author    = $entry.find('.author'),
                     $animeName = $entry.find('.anime-name'),
-                    $history   = $entry.find('.history'),
-                    $unnew     = $entry.find('.unnew').data('key', key).click(function () {
+                    $history   = $entry.find('.history');
+
+                    $entry.find('.unnew').data('key', key).click(function () {
                         var
                             $button = $(this),
                             key     = $button.data('key');
