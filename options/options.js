@@ -1,13 +1,14 @@
 var $template = $(
-    '<div class="entry">                     ' + '\n' +
-    '    <label>                             ' + '\n' +
-    '        <input type="checkbox">         ' + '\n' +
-    '        <span class="author"></span>    ' + '\n' +
-    '        <span class="anime-name"></span>' + '\n' +
-    '    </label>                            ' + '\n' +
-    '    <span class="unnew"></span>         ' + '\n' +
-    '    <div class="history"></div>         ' + '\n' +
-    '</div>                                  '
+    '<div class="entry">                           ' + '\n' +
+    '    <label>                                   ' + '\n' +
+    '        <input type="checkbox">               ' + '\n' +
+    '        <span class="anime-name"></span>      ' + '\n' +
+    '        <span class="author"></span>          ' + '\n' +
+    '    </label>                                  ' + '\n' +
+    '    <span class="delete-entry popup"></span>  ' + '\n' +
+    '    <span class="unnew popup"></span>         ' + '\n' +
+    '    <div class="history"></div>               ' + '\n' +
+    '</div>                                        '
 );
 
 function setIntervalArray(foo, delay, array, callback) {
@@ -133,21 +134,21 @@ $(document).ready(function () {
     });
 
     var repaintWatchList = function () {
-    $nyaa.empty();
-    $kage.empty();
-    chrome.storage.local.get(null, function (items) {
-        for (var key in items) {
-            if (items.hasOwnProperty(key)) {
-                var
-                    entry   = new WatchListEntry(items[key]),
-                    history = entry.getHistory();
+        $nyaa.empty();
+        $kage.empty();
+        chrome.storage.local.get(null, function (items) {
+            for (var key in items) {
+                if (items.hasOwnProperty(key)) {
+                    var
+                        entry   = new WatchListEntry(items[key]),
+                        history = entry.getHistory();
 
-                var
-                    $entry     = $template.clone(),
-                    $checkbox  = $entry.find('input[type="checkbox"]'),
-                    $author    = $entry.find('.author'),
-                    $animeName = $entry.find('.anime-name'),
-                    $history   = $entry.find('.history');
+                    var
+                        $entry     = $template.clone(),
+                        $checkbox  = $entry.find('input[type="checkbox"]'),
+                        $author    = $entry.find('.author'),
+                        $animeName = $entry.find('.anime-name'),
+                        $history   = $entry.find('.history');
 
                     $entry.find('.unnew').data('key', key).click(function () {
                         var
@@ -172,41 +173,69 @@ $(document).ready(function () {
                         });
                     });
 
-                $checkbox.attr('checked', entry.isActive());
-                $author.text(entry.getAuthor() || '<без автора>');
-                $animeName.text(entry.getAnimeName() || '<без названия>');
+                    $entry.find('.delete-entry').data('key', key).click(function () {
+                        var
+                            $button = $(this),
+                            key     = $button.data('key');
 
-                for (var i = 0, n = Math.min(3, history.length); i < n; ++i) {
-                    var $historyEntry = $('<div/>')
-                        .text(history[i].getTitle())
-                        .toggleClass('loaded', history[i].wasLoaded())
-                        .toggleClass('new', history[i].isNew())
-                        .data('historyEntry', history[i])
-                        .click(function () {
-                            window.location = $(this).data('historyEntry').getLink();
+                        chrome.storage.local.remove(key, function () {
+                            repaintWatchList();
                         });
+                    });
 
-                    $history.append($historyEntry);
-                }
+                    $checkbox.attr('checked', entry.isActive()).data('key', key).change(function () {
+                        var
+                            $checkbox = $(this),
+                            active    = $checkbox.is(':checked'),
+                            key       = $checkbox.data('key');
 
-                $entry.data({
-                    link  : key,
-                    entry : entry
-                });
+                        chrome.storage.local.get(key, function (result) {
+                            var entry = new WatchListEntry(result[key])
 
-                (function () {
-                    switch (entry.getType()) {
-                        case WatchListEntry.prototype.ENTRY_TYPE.NYAA:
-                            return $nyaa;
-                        case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
-                            return $kage;
-                        default:
-                            return $dummy;
+                            entry.toggleActive(active);
+
+                            var obj = {};
+                            obj[key] = entry;
+
+                            chrome.storage.local.set(obj);
+
+                            repaintWatchList(); // sic!
+                        });
+                    });
+                    $author.text(entry.getAuthor() || '<без автора>');
+                    $animeName.text(entry.getAnimeName() || '<без названия>');
+
+                    for (var i = 0, n = Math.min(3, history.length); i < n; ++i) {
+                        var $historyEntry = $('<div/>')
+                            .text(history[i].getTitle())
+                            .toggleClass('loaded', history[i].wasLoaded())
+                            .toggleClass('new', history[i].isNew())
+                            .data('historyEntry', history[i])
+                            .click(function () {
+                                window.location = $(this).data('historyEntry').getLink();
+                            });
+
+                        $history.append($historyEntry);
                     }
-                })().append($entry);
+
+                    $entry.data({
+                        link  : key,
+                        entry : entry
+                    });
+
+                    (function () {
+                        switch (entry.getType()) {
+                            case WatchListEntry.prototype.ENTRY_TYPE.NYAA:
+                                return $nyaa;
+                            case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
+                                return $kage;
+                            default:
+                                return $dummy;
+                        }
+                    })().append($entry);
+                }
             }
-        }
-    });
+        });
     };
 
     repaintWatchList();

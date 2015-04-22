@@ -1,8 +1,8 @@
-* {
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: default;
-}
+/** {*/
+    /*-webkit-user-select: none;*/
+    /*user-select: none;*/
+    /*cursor: default;*/
+/*}*/
 
 .center {
     display: block;
@@ -10,7 +10,7 @@
 }
 
 .author {
-    color: red;
+    color: #06c;
     font-size: 10px;
     vertical-align: top;
 }
@@ -24,19 +24,19 @@
     font-style: italic;
 }
 
-.unnew {
+.popup {
     position: relative;
+    float: right;
+    margin: 4px;
     border-radius: 50%;
     width: 8px;
     height: 8px;
     display: inline-block;
-    background-color: #9c3;
 }
 
-.unnew:after {
-    content: "Снять все отметки";
+.popup:after {
     position: absolute;
-    left: 8px;
+    right: 8px;
     bottom: 8px;
     border: 1px solid gray;
     padding: 4px;
@@ -46,9 +46,25 @@
     font: 10px sans-serif;
 }
 
-.unnew:hover:after {
+.popup:hover:after {
     opacity: 1;
     transition: opacity 0s 0.8s;
+}
+
+.unnew {
+    background-color: #9c3;
+}
+
+.unnew:after {
+    content: "Снять все отметки";
+}
+
+.delete-entry {
+    background-color: #f36;
+}
+
+.delete-entry:after {
+    content: "Удалить запись";
 }
 
 .history {

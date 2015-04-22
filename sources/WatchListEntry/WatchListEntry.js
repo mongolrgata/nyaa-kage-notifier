@@ -134,6 +134,13 @@ WatchListEntry.prototype.isActive = function isActive() {
 };
 
 /**
+ * @param {boolean} active
+ */
+WatchListEntry.prototype.toggleActive = function toggleActive(active) {
+    this._active = active;
+};
+
+/**
  * @returns {string}
  */
 WatchListEntry.prototype.getAuthor = function getAuthor() {
