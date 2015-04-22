@@ -4,10 +4,10 @@ function stringifyWatchList(foo) {
     });
 
     chrome.storage.local.get(null, function (result) {
-        foo(btoa(JSON.stringify(result)));
+        foo(btoa(encodeURIComponent(JSON.stringify(result))));
     });
 }
 
 function parseWatchList(str) {
-    chrome.storage.local.set(JSON.parse(atob(str)));
+    chrome.storage.local.set(JSON.parse(decodeURIComponent(atob(str))));
 }
