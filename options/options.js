@@ -206,16 +206,17 @@ $(document).ready(function () {
                     $animeName.text(entry.getAnimeName() || '<без названия>');
 
                     for (var i = 0, n = Math.min(3, history.length); i < n; ++i) {
-                        var $historyEntry = $('<div/>')
+                        var $historyEntry = $('<a/>')
+                            .attr({
+                                 'href': history[i].getLink(),
+                                 'download': true
+                            })
                             .text(history[i].getTitle())
                             .toggleClass('loaded', history[i].wasLoaded())
                             .toggleClass('new', history[i].isNew())
-                            .data('historyEntry', history[i])
-                            .click(function () {
-                                window.location = $(this).data('historyEntry').getLink();
-                            });
+                            .data('historyEntry', history[i]);
 
-                        $history.append($historyEntry);
+                        $history.append($('<div/>').append($historyEntry));
                     }
 
                     $entry.data({
