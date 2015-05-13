@@ -41,6 +41,7 @@ button, input {
 }
 
 .popup {
+    position: relative; /* don't touch */
     float: right;
     margin: 4px;
     border-radius: 50%;
@@ -66,17 +67,17 @@ button, input {
     bottom: 8px;
     border: 1px solid gray;
     padding: 4px;
-    /*opacity: 0;*/
+    height: 0;
+    opacity: 0;
     background-color: whitesmoke;
     white-space: nowrap;
     font: 10px sans-serif;
-    display: none;
 }
 
 .popup:hover:after {
-    /*opacity: 1;*/
-    /*transition: all 0s 0.8s;*/
-    display: block;
+    height: auto; /* sic! */
+    opacity: 1;
+    transition: opacity 0s 0.8s, height 0s 0s;
 }
 
 .active-toggle {

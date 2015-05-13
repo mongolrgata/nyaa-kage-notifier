@@ -194,8 +194,8 @@ $(document).ready(function () {
 
     var repaintWatchList = function () {
         $body.css({
-            minWidth: $body.width() + 14, // sic!
-            minHeight: $body.height()
+            minWidth  : $body.width() + 14, // sic!
+            minHeight : $body.height()
         });
 
         $nyaa.empty();
@@ -349,8 +349,8 @@ $(document).ready(function () {
             }
 
             $body.css({
-                minWidth: 0,
-                minHeight: 0
+                minWidth  : 0,
+                minHeight : 0
             });
         });
     };
