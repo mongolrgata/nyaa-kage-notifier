@@ -1,3 +1,4 @@
+//noinspection JSUnusedGlobalSymbols
 function stringifyWatchList(foo) {
     foo = foo || (function (base64str) {
         console.log(base64str);
@@ -8,6 +9,7 @@ function stringifyWatchList(foo) {
     });
 }
 
+//noinspection JSUnusedGlobalSymbols
 function parseWatchList(str) {
     chrome.storage.local.set(JSON.parse(decodeURIComponent(atob(str))));
 }
