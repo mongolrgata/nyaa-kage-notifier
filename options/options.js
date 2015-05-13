@@ -1,12 +1,13 @@
 var $template = $(
     '<div class="entry">                           ' + '\n' +
     '    <label>                                   ' + '\n' +
-    '        <input type="checkbox">               ' + '\n' +
+    '        <input class="hide" type="checkbox">  ' + '\n' +
     '        <span class="anime-name"></span>      ' + '\n' +
     '        <span class="author"></span>          ' + '\n' +
     '    </label>                                  ' + '\n' +
     '    <span class="delete-entry popup"></span>  ' + '\n' +
     '    <span class="unnew popup"></span>         ' + '\n' +
+    '    <span class="active-toggle popup"></span> ' + '\n' +
     '    <div class="history"></div>               ' + '\n' +
     '</div>                                        '
 );
@@ -93,6 +94,8 @@ $(document).ready(function () {
         $buttonUpdate = $('button.update'),
         $buttonGetOptions = $('button.getOptions'),
         $buttonLoadOptions = $('button.loadOptions'),
+        $buttonActivateAll = $('button.activate-all'),
+        $buttonDeactivateAll = $('button.deactivate-all'),
         $optionString = $('#optionString'),
         $options = $('input[name="options"]'),
         $nyaa   = $('.nyaa'),
@@ -155,6 +158,32 @@ $(document).ready(function () {
        });
     });
 
+    $buttonActivateAll.click(function () {
+        chrome.storage.local.get(null, function (result) {
+            for (var key in result) {
+                result[key] = new WatchListEntry(result[key]);
+                result[key].toggleActive(true);
+            }
+
+            chrome.storage.local.set(result);
+
+            repaintWatchList();
+        });
+    });
+
+    $buttonDeactivateAll.click(function () {
+        chrome.storage.local.get(null, function (result) {
+            for (var key in result) {
+                result[key] = new WatchListEntry(result[key]);
+                result[key].toggleActive(false);
+            }
+
+            chrome.storage.local.set(result);
+
+            repaintWatchList();
+        });
+    });
+
     var repaintWatchList = function () {
         $nyaa.empty();
         $kage.empty();
@@ -206,6 +235,25 @@ $(document).ready(function () {
                         });
                     });
 
+                    $entry.find('.active-toggle').data('key', key).click(function () {
+                        var
+                            $button = $(this),
+                            key     = $button.data('key');
+
+                        chrome.storage.local.get(key, function (result) {
+                            var entry = new WatchListEntry(result[key]);
+
+                            entry.toggleActive(!entry.isActive());
+
+                            var obj = {};
+                            obj[key] = entry;
+
+                            chrome.storage.local.set(obj);
+
+                            repaintWatchList();
+                        });
+                    });
+
                     $checkbox.attr('checked', entry.isActive()).data('key', key).change(function () {
                         var
                             $checkbox = $(this),
@@ -213,7 +261,7 @@ $(document).ready(function () {
                             key       = $checkbox.data('key');
 
                         chrome.storage.local.get(key, function (result) {
-                            var entry = new WatchListEntry(result[key])
+                            var entry = new WatchListEntry(result[key]);
 
                             entry.toggleActive(active);
 
@@ -241,6 +289,8 @@ $(document).ready(function () {
 
                         $history.append($('<div/>').append($historyEntry));
                     }
+
+                    $entry.toggleClass('deactivated-entry', !entry.isActive());
 
                     $entry.data({
                         link  : key,

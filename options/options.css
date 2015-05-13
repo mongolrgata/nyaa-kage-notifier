@@ -1,7 +1,7 @@
 /** {*/
-    /*-webkit-user-select: none;*/
-    /*user-select: none;*/
-    /*cursor: default;*/
+/*-webkit-user-select: none;*/
+/*user-select: none;*/
+/*cursor: default;*/
 /*}*/
 
 #optionString {
@@ -40,21 +40,43 @@
     display: inline-block;
 }
 
+.hide {
+    display: none;
+}
+
+.deactivated-entry {
+    color: gray !important;
+}
+
+.deactivated-entry .history {
+    display: none;
+}
+
 .popup:after {
     position: absolute;
     right: 8px;
     bottom: 8px;
     border: 1px solid gray;
     padding: 4px;
-    opacity: 0;
+    /*opacity: 0;*/
     background-color: whitesmoke;
     white-space: nowrap;
     font: 10px sans-serif;
+    display: none;
 }
 
 .popup:hover:after {
-    opacity: 1;
-    transition: opacity 0s 0.8s;
+    /*opacity: 1;*/
+    /*transition: all 0s 0.8s;*/
+    display: block;
+}
+
+.active-toggle {
+    background-color: #06c;
+}
+
+.active-toggle:after {
+    content: "Сменить активность";
 }
 
 .unnew {
