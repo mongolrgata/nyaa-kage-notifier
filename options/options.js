@@ -1,5 +1,8 @@
 var $template = $(
     '<div class="entry">                               ' + '\n' +
+    '    <span class="delete-entry popup"></span>      ' + '\n' +
+    '    <span class="unnew popup"></span>             ' + '\n' +
+    '    <span class="active-toggle popup"></span>     ' + '\n' +
     '    <label>                                       ' + '\n' +
     '        <input class="hide" type="checkbox">      ' + '\n' +
     '        <a target="_blank" class="source-link">   ' + '\n' +
@@ -8,9 +11,6 @@ var $template = $(
     '        <span class="anime-name"></span>          ' + '\n' +
     '        <span class="author"></span>              ' + '\n' +
     '    </label>                                      ' + '\n' +
-    '    <span class="delete-entry popup"></span>      ' + '\n' +
-    '    <span class="unnew popup"></span>             ' + '\n' +
-    '    <span class="active-toggle popup"></span>     ' + '\n' +
     '    <div class="history"></div>                   ' + '\n' +
     '</div>                                            '
 );
@@ -94,6 +94,7 @@ function updateKageEntry(id, entry, $html) {
 
 $(document).ready(function () {
     var
+        $body                = $('body'),
         $buttonUpdate        = $('button.update'),
         $buttonGetOptions    = $('button.getOptions'),
         $buttonLoadOptions   = $('button.loadOptions'),
@@ -192,6 +193,11 @@ $(document).ready(function () {
     });
 
     var repaintWatchList = function () {
+        $body.css({
+            minWidth: $body.width() + 14, // sic!
+            minHeight: $body.height()
+        });
+
         $nyaa.empty();
         $kage.empty();
 
@@ -341,6 +347,11 @@ $(document).ready(function () {
                     })().append($entry);
                 }
             }
+
+            $body.css({
+                minWidth: 0,
+                minHeight: 0
+            });
         });
     };
 

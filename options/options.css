@@ -4,6 +4,10 @@
     /*cursor: default;*/
 /*}*/
 
+body {
+    overflow-x: hidden;
+}
+
 button, input {
     margin: 0;
     padding: 0;
@@ -37,13 +41,11 @@ button, input {
 }
 
 .popup {
-    position: relative;
     float: right;
     margin: 4px;
     border-radius: 50%;
     width: 8px;
     height: 8px;
-    display: inline-block;
 }
 
 .hide {
