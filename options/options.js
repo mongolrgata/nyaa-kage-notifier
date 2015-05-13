@@ -2,6 +2,7 @@ var $template = $(
     '<div class="entry">                           ' + '\n' +
     '    <label>                                   ' + '\n' +
     '        <input class="hide" type="checkbox">  ' + '\n' +
+    '        <a href="" target="_blank" class="source-link"><img src="/images/external_link.png"></a> ' + '\n' +
     '        <span class="anime-name"></span>      ' + '\n' +
     '        <span class="author"></span>          ' + '\n' +
     '    </label>                                  ' + '\n' +
@@ -200,7 +201,8 @@ $(document).ready(function () {
                         $checkbox  = $entry.find('input[type="checkbox"]'),
                         $author    = $entry.find('.author'),
                         $animeName = $entry.find('.anime-name'),
-                        $history   = $entry.find('.history');
+                        $history   = $entry.find('.history'),
+                        $sourceLink = $entry.find('.source-link');
 
                     $entry.find('.unnew').data('key', key).click(function () {
                         var
@@ -253,6 +255,8 @@ $(document).ready(function () {
                             repaintWatchList();
                         });
                     });
+
+                    $sourceLink.attr('href', key);
 
                     $checkbox.attr('checked', entry.isActive()).data('key', key).change(function () {
                         var
