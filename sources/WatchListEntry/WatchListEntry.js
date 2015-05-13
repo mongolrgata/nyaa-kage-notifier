@@ -7,6 +7,7 @@ var HistoryEntry = function HistoryEntry(obj) {
     this._link = obj._link;
     this._date = obj._date;
     this._loaded = obj._loaded;
+    this._forceOld = obj._forceOld;
 };
 
 /**
@@ -23,13 +24,17 @@ HistoryEntry.prototype.wasLoaded = function wasLoaded() {
     return this._loaded;
 };
 
+HistoryEntry.prototype.setLoaded = function wasLoaded() {
+    this._loaded = true;
+};
+
 /**
  * @returns {boolean}
  */
 HistoryEntry.prototype.isNew = function isNew() {
     var today = new Date();
 
-    return today.setDate(today.getDate() - 2) < Date.parse(this._date);
+    return !this._forceOld && (today.setDate(today.getDate() - 2) < Date.parse(this._date));
 };
 
 /**
@@ -37,6 +42,10 @@ HistoryEntry.prototype.isNew = function isNew() {
  */
 HistoryEntry.prototype.getLink = function getLink() {
     return this._link;
+};
+
+HistoryEntry.prototype.forceOld = function forceOld() {
+    return this._forceOld = true;
 };
 
 /**
@@ -104,7 +113,7 @@ WatchListEntry.prototype._getCommonTitle = function _getCommonTitle() {
 
     for (var i = 0, n = titles.length; i < n; ++i) {
         for (var j = 0, m = Math.min(result.length, titles[i].length); j < m; ++j) {
-            if (result[j] == '-' || result[j] != titles[i][j]) {
+            if (result[j] != titles[i][j]) {
                 result = result.substring(0, j);
                 break;
             }
@@ -126,6 +135,13 @@ WatchListEntry.prototype.getType = function getType() {
  */
 WatchListEntry.prototype.isActive = function isActive() {
     return this._active;
+};
+
+/**
+ * @param {boolean} active
+ */
+WatchListEntry.prototype.toggleActive = function toggleActive(active) {
+    this._active = active;
 };
 
 /**
@@ -152,7 +168,7 @@ WatchListEntry.prototype.getAnimeName = function getAnimeName() {
         case WatchListEntry.prototype.ENTRY_TYPE.NYAA:
             var commonTitle = this._getCommonTitle();
 
-            return /^(\[.*?])?(.*)/.exec(commonTitle)[2].trim();
+            return /^(\[.*?])?([^0-9]*)/.exec(commonTitle)[2].trim();
         case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
             return this._animeName;
         default:
@@ -184,4 +200,8 @@ WatchListEntry.prototype.getHistory = function getHistory() {
  */
 WatchListEntry.prototype.insertHistoryEntry = function insertHistoryEntry(historyEntry) {
     this._history[historyEntry.getTitle()] = historyEntry;
+};
+
+WatchListEntry.prototype.setLoadedHistoryEntry = function setLoadedHistoryEntry(historyKey) {
+    this._history[historyKey].setLoaded();
 };
