@@ -1,16 +1,18 @@
 var $template = $(
-    '<div class="entry">                           ' + '\n' +
-    '    <label>                                   ' + '\n' +
-    '        <input class="hide" type="checkbox">  ' + '\n' +
-    '        <a href="" target="_blank" class="source-link"><img src="/images/external_link.png"></a> ' + '\n' +
-    '        <span class="anime-name"></span>      ' + '\n' +
-    '        <span class="author"></span>          ' + '\n' +
-    '    </label>                                  ' + '\n' +
-    '    <span class="delete-entry popup"></span>  ' + '\n' +
-    '    <span class="unnew popup"></span>         ' + '\n' +
-    '    <span class="active-toggle popup"></span> ' + '\n' +
-    '    <div class="history"></div>               ' + '\n' +
-    '</div>                                        '
+    '<div class="entry">                               ' + '\n' +
+    '    <label>                                       ' + '\n' +
+    '        <input class="hide" type="checkbox">      ' + '\n' +
+    '        <a target="_blank" class="source-link">   ' + '\n' +
+    '            <img src="/images/external_link.png"> ' + '\n' +
+    '        </a>                                      ' + '\n' +
+    '        <span class="anime-name"></span>          ' + '\n' +
+    '        <span class="author"></span>              ' + '\n' +
+    '    </label>                                      ' + '\n' +
+    '    <span class="delete-entry popup"></span>      ' + '\n' +
+    '    <span class="unnew popup"></span>             ' + '\n' +
+    '    <span class="active-toggle popup"></span>     ' + '\n' +
+    '    <div class="history"></div>                   ' + '\n' +
+    '</div>                                            '
 );
 
 function setIntervalArray(foo, delay, array, callback) {
@@ -92,17 +94,17 @@ function updateKageEntry(id, entry, $html) {
 
 $(document).ready(function () {
     var
-        $buttonUpdate = $('button.update'),
-        $buttonGetOptions = $('button.getOptions'),
-        $buttonLoadOptions = $('button.loadOptions'),
-        $buttonActivateAll = $('button.activate-all'),
+        $buttonUpdate        = $('button.update'),
+        $buttonGetOptions    = $('button.getOptions'),
+        $buttonLoadOptions   = $('button.loadOptions'),
+        $buttonActivateAll   = $('button.activate-all'),
         $buttonDeactivateAll = $('button.deactivate-all'),
-        $optionString = $('#optionString'),
-        $options = $('input[name="options"]'),
-        $nyaa   = $('.nyaa'),
-        $kage   = $('.kage'),
-        $dummy  = $('<div/>'),
-        $load   = $('.my-pretty-load');
+        $optionString        = $('#optionString'),
+        $options             = $('input[name="options"]'),
+        $nyaa                = $('.nyaa'),
+        $kage                = $('.kage'),
+        $dummy               = $('<div/>'),
+        $load                = $('.my-pretty-load');
 
     $buttonUpdate.click(function () {
         var links = [];
@@ -142,28 +144,30 @@ $(document).ready(function () {
     });
 
     $buttonGetOptions.click(function () {
-       $optionString.empty();
+        $optionString.empty();
 
-       stringifyWatchList(function (optionString) {
-          $optionString.text(optionString);
-       });
+        stringifyWatchList(function (optionString) {
+            $optionString.text(optionString);
+        });
     });
 
     $buttonLoadOptions.click(function () {
-       var watchList = parseWatchList($options.val());
+        var watchList = parseWatchList($options.val());
 
-       chrome.storage.local.clear(function () {
-          chrome.storage.local.set(watchList, function () {
-             repaintWatchList();
-          });
-       });
+        chrome.storage.local.clear(function () {
+            chrome.storage.local.set(watchList, function () {
+                repaintWatchList();
+            });
+        });
     });
 
     $buttonActivateAll.click(function () {
         chrome.storage.local.get(null, function (result) {
             for (var key in result) {
-                result[key] = new WatchListEntry(result[key]);
-                result[key].toggleActive(true);
+                if (result.hasOwnProperty(key)) {
+                    result[key] = new WatchListEntry(result[key]);
+                    result[key].toggleActive(true);
+                }
             }
 
             chrome.storage.local.set(result);
@@ -175,8 +179,10 @@ $(document).ready(function () {
     $buttonDeactivateAll.click(function () {
         chrome.storage.local.get(null, function (result) {
             for (var key in result) {
-                result[key] = new WatchListEntry(result[key]);
-                result[key].toggleActive(false);
+                if (result.hasOwnProperty(key)) {
+                    result[key] = new WatchListEntry(result[key]);
+                    result[key].toggleActive(false);
+                }
             }
 
             chrome.storage.local.set(result);
@@ -197,11 +203,11 @@ $(document).ready(function () {
                         history = entry.getHistory();
 
                     var
-                        $entry     = $template.clone(),
-                        $checkbox  = $entry.find('input[type="checkbox"]'),
-                        $author    = $entry.find('.author'),
-                        $animeName = $entry.find('.anime-name'),
-                        $history   = $entry.find('.history'),
+                        $entry      = $template.clone(),
+                        $checkbox   = $entry.find('input[type="checkbox"]'),
+                        $author     = $entry.find('.author'),
+                        $animeName  = $entry.find('.anime-name'),
+                        $history    = $entry.find('.history'),
                         $sourceLink = $entry.find('.source-link');
 
                     $entry.find('.unnew').data('key', key).click(function () {
@@ -283,20 +289,20 @@ $(document).ready(function () {
                     for (var i = 0, n = Math.min(3, history.length); i < n; ++i) {
                         var $historyEntry = $('<a/>')
                             .attr({
-                                 'href': history[i].getLink(),
-                                 'download': true
+                                'href'     : history[i].getLink(),
+                                'download' : true
                             })
                             .text(history[i].getTitle())
                             .toggleClass('loaded', history[i].wasLoaded())
                             .toggleClass('new', history[i].isNew())
                             .data({
-                                  'historyEntry': history[i],
-                                  'key': key
+                                'historyEntry' : history[i],
+                                'key'          : key
                             })
-                            .click(function() {
+                            .click(function () {
                                 var
-                                    $button = $(this),
-                                    key     = $button.data('key'),
+                                    $button    = $(this),
+                                    key        = $button.data('key'),
                                     historyKey = $button.data('historyEntry').getTitle();
 
                                 chrome.storage.local.get(key, function (result) {
