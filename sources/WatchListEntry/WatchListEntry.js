@@ -24,6 +24,10 @@ HistoryEntry.prototype.wasLoaded = function wasLoaded() {
     return this._loaded;
 };
 
+HistoryEntry.prototype.setLoaded = function wasLoaded() {
+    this._loaded = true;
+};
+
 /**
  * @returns {boolean}
  */
@@ -196,4 +200,8 @@ WatchListEntry.prototype.getHistory = function getHistory() {
  */
 WatchListEntry.prototype.insertHistoryEntry = function insertHistoryEntry(historyEntry) {
     this._history[historyEntry.getTitle()] = historyEntry;
+};
+
+WatchListEntry.prototype.setLoadedHistoryEntry = function setLoadedHistoryEntry(historyKey) {
+    this._history[historyKey].setLoaded();
 };

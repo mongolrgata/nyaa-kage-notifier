@@ -285,7 +285,29 @@ $(document).ready(function () {
                             .text(history[i].getTitle())
                             .toggleClass('loaded', history[i].wasLoaded())
                             .toggleClass('new', history[i].isNew())
-                            .data('historyEntry', history[i]);
+                            .data({
+                                  'historyEntry': history[i],
+                                  'key': key
+                            })
+                            .click(function() {
+                                var
+                                    $button = $(this),
+                                    key     = $button.data('key'),
+                                    historyKey = $button.data('historyEntry').getTitle();
+
+                                chrome.storage.local.get(key, function (result) {
+                                    var entry = new WatchListEntry(result[key]);
+
+                                    entry.setLoadedHistoryEntry(historyKey);
+
+                                    var obj = {};
+                                    obj[key] = entry;
+
+                                    chrome.storage.local.set(obj);
+
+                                    repaintWatchList();
+                                });
+                            });
 
                         $history.append($('<div/>').append($historyEntry));
                     }

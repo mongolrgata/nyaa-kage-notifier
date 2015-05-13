@@ -84,7 +84,7 @@
 }
 
 .unnew:after {
-    content: "Снять все отметки";
+    content: "Снять отметки";
 }
 
 .delete-entry {
