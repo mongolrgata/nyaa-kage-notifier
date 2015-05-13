@@ -5,11 +5,20 @@
     <link rel="stylesheet" type="text/css" href="options.css">
     <script src="/sources/external/jquery-2.1.3.min.js"></script>
     <script src="/sources/WatchListEntry/WatchListEntry.js"></script>
+    <script src="/sources/helpers.js"></script>
     <script src="/sources/nyaaHelpers.js"></script>
     <script src="/sources/kageHelpers.js"></script>
 </head>
 <body>
-<button class='center update'>Обновить список</button>
+<button class='update'>Обновить список</button>
+<button class='getOptions'>Литеразовать список</button>
+<div id="optionString"></div>
+
+<br>
+
+<input type="text" name="options">
+<button class='loadOptions'>Загрузить список</button>
+
 <h1>Nyaa Torrent</h1>
 
 <div class='nyaa'></div>

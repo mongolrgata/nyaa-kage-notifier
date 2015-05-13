@@ -11,5 +11,5 @@ function stringifyWatchList(foo) {
 
 //noinspection JSUnusedGlobalSymbols
 function parseWatchList(str) {
-    chrome.storage.local.set(JSON.parse(decodeURIComponent(atob(str))));
+    return JSON.parse(decodeURIComponent(atob(str)));
 }

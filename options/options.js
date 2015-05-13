@@ -90,13 +90,17 @@ function updateKageEntry(id, entry, $html) {
 
 $(document).ready(function () {
     var
-        $button = $('button.update'),
+        $buttonUpdate = $('button.update'),
+        $buttonGetOptions = $('button.getOptions'),
+        $buttonLoadOptions = $('button.loadOptions'),
+        $optionString = $('#optionString'),
+        $options = $('input[name="options"]'),
         $nyaa   = $('.nyaa'),
         $kage   = $('.kage'),
         $dummy  = $('<div/>'),
         $load   = $('.my-pretty-load');
 
-    $button.click(function () {
+    $buttonUpdate.click(function () {
         var links = [];
 
         $load.removeClass('hidden');
@@ -133,9 +137,28 @@ $(document).ready(function () {
         });
     });
 
+    $buttonGetOptions.click(function () {
+       $optionString.empty();
+
+       stringifyWatchList(function (optionString) {
+          $optionString.text(optionString);
+       });
+    });
+
+    $buttonLoadOptions.click(function () {
+       var watchList = parseWatchList($options.val());
+
+       chrome.storage.local.clear(function () {
+          chrome.storage.local.set(watchList, function () {
+             repaintWatchList();
+          });
+       });
+    });
+
     var repaintWatchList = function () {
         $nyaa.empty();
         $kage.empty();
+
         chrome.storage.local.get(null, function (items) {
             for (var key in items) {
                 if (items.hasOwnProperty(key)) {

@@ -4,6 +4,12 @@
     /*cursor: default;*/
 /*}*/
 
+#optionString {
+    max-width: 256px;
+    display: inline-block;
+    overflow: hidden;
+}
+
 .center {
     display: block;
     margin: auto;
@@ -104,17 +110,18 @@
     color: blue;
 }
 
-.kage .history div:nth-child(1) {
+.kage .history div:nth-child(1) a {
     cursor: pointer;
     color: blue;
 }
 
-.kage .history div:nth-child(1):hover {
+.kage .history div:nth-child(1):hover a {
     color: #FF7033;
     text-decoration: underline;
 }
 
-.kage .history div:nth-child(n+2) {
+.kage .history div:nth-child(n+2) a {
+    cursor: default;
     color: gray;
 }
 
