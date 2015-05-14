@@ -65,8 +65,8 @@ button, input {
     position: absolute;
     right: 8px;
     bottom: 8px;
-    border: 1px solid gray;
-    padding: 4px;
+    border: 0 solid gray;
+    padding: 0;
     height: 0;
     opacity: 0;
     background-color: whitesmoke;
@@ -75,9 +75,11 @@ button, input {
 }
 
 .popup:hover:after {
+    border-width: 1px;
+    padding: 4px;
     height: auto; /* sic! */
     opacity: 1;
-    transition: opacity 0s 0.8s, height 0s 0s;
+    transition: opacity 0s 0.8s, height 0s 0s, padding 0s 0s, border-width 0s 0s;
 }
 
 .active-toggle {
