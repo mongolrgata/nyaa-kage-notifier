@@ -14,6 +14,10 @@ button, input {
     width: 196px;
 }
 
+.danger {
+    display: none;
+}
+
 #optionString {
     max-width: 196px;
     display: inline-block;

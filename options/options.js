@@ -15,6 +15,15 @@ var $template = $(
     '</div>                                            '
 );
 
+function showDangerZone() {
+    var
+        $dangerA       = $('#danger'),
+        $dangerButtons = $('.danger');
+
+    $dangerA.hide();
+    $dangerButtons.show();
+}
+
 function setIntervalArray(foo, delay, array, callback) {
     var cnt = 0;
 
@@ -96,6 +105,7 @@ $(document).ready(function () {
     var
         $body                = $('body'),
         $buttonUpdate        = $('button.update'),
+        $buttonDanger        = $('button#danger'),
         $buttonGetOptions    = $('button.getOptions'),
         $buttonLoadOptions   = $('button.loadOptions'),
         $buttonActivateAll   = $('button.activate-all'),
@@ -142,6 +152,10 @@ $(document).ready(function () {
                 $load.addClass('hidden');
             }, 500);
         });
+    });
+
+    $buttonDanger.click(function () {
+        showDangerZone();
     });
 
     $buttonGetOptions.click(function () {
