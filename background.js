@@ -45,120 +45,159 @@ chrome.pageAction.onClicked.addListener(function (tab) {
 });
 
 function setIntervalArray(foo, delay, array, callback) {
-   var cnt = 0;
+    var cnt = 0;
 
-   var intervalID = setInterval(
-         function () {
+    var intervalID = setInterval(
+        function () {
             if (cnt < array.length) {
-               foo(array[cnt++]);
+                foo(array[cnt++]);
             }
             else {
-               clearInterval(intervalID);
-               callback();
+                clearInterval(intervalID);
+                callback();
             }
-         },
-         delay
-   );
+        },
+        delay
+    );
 }
 
 function containsHistoryEntry(historyArray, historyEntry) {
-   for (var i = 0, n = historyArray.length; i < n; ++i) {
-      if (historyArray[i].isEqual(historyEntry)) {
-         return true;
-      }
-   }
+    for (var i = 0, n = historyArray.length; i < n; ++i) {
+        if (historyArray[i].isEqual(historyEntry)) {
+            return true;
+        }
+    }
 
-   return false;
+    return false;
 }
 
 function updateNyaaEntry(id, $html) {
-   var historyArray = nyaaHistoryArray($html);
+    var historyArray = nyaaHistoryArray($html);
 
-   chrome.storage.local.get(id, function (result) {
-      var
-            entry = new WatchListEntry(result[id]),
+    chrome.storage.local.get(id, function (result) {
+        var
+            entry      = new WatchListEntry(result[id]),
             oldHistory = entry.getHistory();
 
-      for (var i = 0, n = historyArray.length; i < n; ++i) {
-         if (!containsHistoryEntry(oldHistory, historyArray[i])) {
-            entry.insertHistoryEntry(historyArray[i]);
+        for (var i = 0, n = historyArray.length; i < n; ++i) {
+            if (!containsHistoryEntry(oldHistory, historyArray[i])) {
+                entry.insertHistoryEntry(historyArray[i]);
+
+                chrome.notifications.create(
+                    historyArray[i].getLink(), // notificationId
+                    {
+                        type    : 'basic',
+                        iconUrl : debug.messIco,
+                        title   : '[Nyaa Record]',
+                        message : historyArray[i].getTitle()
+                    },
+                    debug.dummy
+                );
+            }
+        }
+
+        var obj = {};
+        obj[id] = entry;
+
+        chrome.storage.local.set(obj);
+    });
+}
+
+function updateKageEntry(id, entry, $html) {
+    var
+        link     = entry.getHistory()[0].getLink(),
+        srt      = /srt=(.*)/.exec(link)[1],
+        $element = $html.find('input[name="srt"][value="' + srt + '"]').parent().find('input[alt="Скачать"]');
+
+    var newHistoryEntry = new HistoryEntry({
+        _title  : getTitle($element),
+        _link   : link,
+        _date   : '' + new Date(),
+        _loaded : false
+    });
+
+    chrome.storage.local.get(id, function (result) {
+        var
+            entry      = new WatchListEntry(result[id]),
+            oldHistory = entry.getHistory();
+
+        if (!containsHistoryEntry(oldHistory, newHistoryEntry)) {
+            entry.insertHistoryEntry(newHistoryEntry);
 
             chrome.notifications.create(
-                  historyArray[i].getLink(), // notificationId
-                  {
-                     type    : 'basic',
-                     iconUrl : debug.messIco,
-                     title   : '[New Record]',
-                     message : historyArray[i].getTitle()
-                  },
-                  debug.dummy
+                newHistoryEntry.getLink(), // notificationId
+                {
+                    type    : 'basic',
+                    iconUrl : debug.messIco,
+                    title   : '[Kage Record]',
+                    message : entry.getAnimeName() + ': ' + newHistoryEntry.getTitle()
+                },
+                debug.dummy
             );
-         }
-      }
+        }
 
-      var obj = {};
-      obj[id] = entry;
+        var obj = {};
+        obj[id] = entry;
 
-      chrome.storage.local.set(obj);
-   });
+        chrome.storage.local.set(obj);
+    });
 }
 
 function setAlarm() {
-   chrome.alarms.create('checkUpdate', {
-      when            : Date.now(),
-      periodInMinutes : 60
-   });
+    chrome.alarms.create('checkUpdate', {
+        when            : Date.now(),
+        periodInMinutes : 20
+    });
 
-   chrome.alarms.onAlarm.addListener(function (alarm) {
-      switch (alarm['name']) {
-         case 'checkUpdate':
-            chrome.storage.local.get(null, function (result) {
-               var keys = [];
+    chrome.alarms.onAlarm.addListener(function (alarm) {
+        switch (alarm['name']) {
+            case 'checkUpdate':
+                chrome.storage.local.get(null, function (result) {
+                    var keys = [];
 
-               for (var key in result) {
-                  if (result.hasOwnProperty(key)) {
-                     var watchListEntry = new WatchListEntry(result[key]);
+                    for (var key in result) {
+                        if (result.hasOwnProperty(key)) {
+                            var watchListEntry = new WatchListEntry(result[key]);
 
-                     if (watchListEntry.isActive()) {
-                        keys.push(key);
-                     }
-                  }
-               }
+                            if (watchListEntry.isActive()) {
+                                keys.push(key);
+                            }
+                        }
+                    }
 
-               setIntervalArray(function (key) {
-                  var
-                        link = key,
-                        entry = new WatchListEntry(result[key]);
+                    setIntervalArray(function (key) {
+                        var
+                            link  = key,
+                            entry = new WatchListEntry(result[key]);
 
-                  $.get(link, function (result) {
-                     var $html = $($.parseHTML(result.replace(/<img.*?>/g, '')));
+                        $.get(link, function (result) {
+                            var $html = $($.parseHTML(result.replace(/<img.*?>/g, '')));
 
-                     switch (entry.getType()) {
-                        case WatchListEntry.prototype.ENTRY_TYPE.NYAA:
-                           updateNyaaEntry(link, $html);
-                           break;
-                        case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
-                           // TODO
-                           //updateKageEntry(link, entry, $html);
-                           break;
-                     }
-                  });
-               }, 1000, keys, debug.dummy.bind(window, 'UPDATE END'));
-            });
-            break;
-      }
-   });
+                            switch (entry.getType()) {
+                                case WatchListEntry.prototype.ENTRY_TYPE.NYAA:
+                                    updateNyaaEntry(link, $html);
+                                    break;
+                                case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
+                                    updateKageEntry(link, entry, $html);
+                                    break;
+                            }
+                        });
+                    }, 1000, keys, debug.dummy.bind(window, 'UPDATE END'));
+                });
+                break;
+        }
+    });
 
-   chrome.notifications.onClicked.addListener(function (notificationId) {
-      chrome.tabs.create({
-         url : notificationId
-      });
-   });
+    chrome.notifications.onClicked.addListener(function (notificationId) {
+        chrome.tabs.create({
+            url : notificationId
+        });
+    });
 }
 
 chrome.runtime.onInstalled.addListener(function () {
-   setAlarm();
+    setAlarm();
 });
 chrome.runtime.onStartup.addListener(function () {
-   setAlarm();
+    setAlarm();
 });
