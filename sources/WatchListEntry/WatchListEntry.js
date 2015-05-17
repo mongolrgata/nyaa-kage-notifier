@@ -225,3 +225,23 @@ WatchListEntry.prototype.setLoadedHistoryEntryByLink = function setLoadedHistory
         }
     }
 };
+
+/**
+ */
+WatchListEntry.prototype.forceOldHistory = function forceOldHistory() {
+    for (var historyKey in this._history) {
+        if (this._history.hasOwnProperty(historyKey)) {
+            this._history[historyKey].forceOld();
+        }
+    }
+};
+
+/**
+ */
+WatchListEntry.prototype.setLoadedHistory = function setLoadedHistory() {
+    for (var historyKey in this._history) {
+        if (this._history.hasOwnProperty(historyKey)) {
+            this._history[historyKey].setLoaded();
+        }
+    }
+};

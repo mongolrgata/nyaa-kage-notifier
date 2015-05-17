@@ -112,6 +112,8 @@ $(document).ready(function () {
         $buttonLoadOptions   = $('button.loadOptions'),
         $buttonActivateAll   = $('button.activate-all'),
         $buttonDeactivateAll = $('button.deactivate-all'),
+        $buttonUnnewAll      = $('button.unnew-all'),
+        $buttonLoadedAll     = $('button.loaded-all'),
         $optionString        = $('#optionString'),
         $options             = $('input[name="options"]'),
         $nyaa                = $('.nyaa'),
@@ -199,6 +201,38 @@ $(document).ready(function () {
                 if (result.hasOwnProperty(key)) {
                     result[key] = new WatchListEntry(result[key]);
                     result[key].toggleActive(false);
+                }
+            }
+
+            chrome.storage.local.set(result);
+
+            repaintWatchList();
+        });
+    });
+
+    $buttonUnnewAll.click(function () {
+        chrome.storage.local.get(null, function (result) {
+            for (var key in result) {
+                if (result.hasOwnProperty(key)) {
+                    result[key] = new WatchListEntry(result[key]);
+
+                    result[key].forceOldHistory();
+                }
+            }
+
+            chrome.storage.local.set(result);
+
+            repaintWatchList();
+        });
+    });
+
+    $buttonLoadedAll.click(function () {
+        chrome.storage.local.get(null, function (result) {
+            for (var key in result) {
+                if (result.hasOwnProperty(key)) {
+                    result[key] = new WatchListEntry(result[key]);
+
+                    result[key].setLoadedHistory();
                 }
             }
 
