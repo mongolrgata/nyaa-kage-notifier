@@ -15,6 +15,17 @@ var $template = $(
     '</div>                                            '
 );
 
+var historyViewLimit = 3;
+
+function showDangerZone() {
+    var
+        $dangerA       = $('#danger'),
+        $dangerButtons = $('.danger');
+
+    $dangerA.hide();
+    $dangerButtons.show();
+}
+
 function setIntervalArray(foo, delay, array, callback) {
     var cnt = 0;
 
@@ -96,10 +107,13 @@ $(document).ready(function () {
     var
         $body                = $('body'),
         $buttonUpdate        = $('button.update'),
+        $buttonDanger        = $('button#danger'),
         $buttonGetOptions    = $('button.getOptions'),
         $buttonLoadOptions   = $('button.loadOptions'),
         $buttonActivateAll   = $('button.activate-all'),
         $buttonDeactivateAll = $('button.deactivate-all'),
+        $buttonUnnewAll      = $('button.unnew-all'),
+        $buttonLoadedAll     = $('button.loaded-all'),
         $optionString        = $('#optionString'),
         $options             = $('input[name="options"]'),
         $nyaa                = $('.nyaa'),
@@ -144,6 +158,10 @@ $(document).ready(function () {
         });
     });
 
+    $buttonDanger.click(function () {
+        showDangerZone();
+    });
+
     $buttonGetOptions.click(function () {
         $optionString.empty();
 
@@ -183,6 +201,38 @@ $(document).ready(function () {
                 if (result.hasOwnProperty(key)) {
                     result[key] = new WatchListEntry(result[key]);
                     result[key].toggleActive(false);
+                }
+            }
+
+            chrome.storage.local.set(result);
+
+            repaintWatchList();
+        });
+    });
+
+    $buttonUnnewAll.click(function () {
+        chrome.storage.local.get(null, function (result) {
+            for (var key in result) {
+                if (result.hasOwnProperty(key)) {
+                    result[key] = new WatchListEntry(result[key]);
+
+                    result[key].forceOldHistory();
+                }
+            }
+
+            chrome.storage.local.set(result);
+
+            repaintWatchList();
+        });
+    });
+
+    $buttonLoadedAll.click(function () {
+        chrome.storage.local.get(null, function (result) {
+            for (var key in result) {
+                if (result.hasOwnProperty(key)) {
+                    result[key] = new WatchListEntry(result[key]);
+
+                    result[key].setLoadedHistory();
                 }
             }
 
@@ -292,7 +342,7 @@ $(document).ready(function () {
                     $author.text(entry.getAuthor() || '<без автора>');
                     $animeName.text(entry.getAnimeName() || '<без названия>');
 
-                    for (var i = 0, n = Math.min(3, history.length); i < n; ++i) {
+                    for (var i = 0, n = history.length; i < n; ++i) {
                         var $historyEntry = $('<a/>')
                             .attr({
                                 'href'     : history[i].getLink(),
@@ -325,7 +375,20 @@ $(document).ready(function () {
                                 });
                             });
 
-                        $history.append($('<div/>').append($historyEntry));
+                        var $historyDiv = $('<div/>').addClass('history-entry').append($historyEntry);
+                        $history.append($historyDiv);
+
+                        if (history.length > historyViewLimit) {
+                            if (i + 1 > historyViewLimit - 1) {
+                                $historyDiv.hide();
+                            }
+                        }
+                    }
+
+                    if (history.length > historyViewLimit) {
+                        $history.append($('<a/>').addClass('more').text('ещё…').click(function () {
+                            $(this).hide().parent('.history').find('.history-entry').show();
+                        }));
                     }
 
                     $entry.toggleClass('deactivated-entry', !entry.isActive());

@@ -24,7 +24,9 @@ HistoryEntry.prototype.wasLoaded = function wasLoaded() {
     return this._loaded;
 };
 
-HistoryEntry.prototype.setLoaded = function wasLoaded() {
+/**
+ */
+HistoryEntry.prototype.setLoaded = function setLoaded() {
     this._loaded = true;
 };
 
@@ -202,6 +204,44 @@ WatchListEntry.prototype.insertHistoryEntry = function insertHistoryEntry(histor
     this._history[historyEntry.getTitle()] = historyEntry;
 };
 
+/**
+ * @param {string} historyKey
+ */
 WatchListEntry.prototype.setLoadedHistoryEntry = function setLoadedHistoryEntry(historyKey) {
-    this._history[historyKey].setLoaded();
+    if (this._history.hasOwnProperty(historyKey)) {
+        this._history[historyKey].setLoaded();
+    }
+};
+
+/**
+ * @param {string} historyLink
+ */
+WatchListEntry.prototype.setLoadedHistoryEntryByLink = function setLoadedHistoryEntryByLink(historyLink) {
+    for (var historyKey in this._history) {
+        if (this._history.hasOwnProperty(historyKey)) {
+            if (this._history[historyKey].getLink() == historyLink) {
+                this._history[historyKey].setLoaded();
+            }
+        }
+    }
+};
+
+/**
+ */
+WatchListEntry.prototype.forceOldHistory = function forceOldHistory() {
+    for (var historyKey in this._history) {
+        if (this._history.hasOwnProperty(historyKey)) {
+            this._history[historyKey].forceOld();
+        }
+    }
+};
+
+/**
+ */
+WatchListEntry.prototype.setLoadedHistory = function setLoadedHistory() {
+    for (var historyKey in this._history) {
+        if (this._history.hasOwnProperty(historyKey)) {
+            this._history[historyKey].setLoaded();
+        }
+    }
 };
