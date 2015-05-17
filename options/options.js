@@ -15,6 +15,8 @@ var $template = $(
     '</div>                                            '
 );
 
+var historyViewLimit = 3;
+
 function showDangerZone() {
     var
         $dangerA       = $('#danger'),
@@ -306,7 +308,7 @@ $(document).ready(function () {
                     $author.text(entry.getAuthor() || '<без автора>');
                     $animeName.text(entry.getAnimeName() || '<без названия>');
 
-                    for (var i = 0, n = Math.min(3, history.length); i < n; ++i) {
+                    for (var i = 0, n = history.length; i < n; ++i) {
                         var $historyEntry = $('<a/>')
                             .attr({
                                 'href'     : history[i].getLink(),
@@ -339,7 +341,20 @@ $(document).ready(function () {
                                 });
                             });
 
-                        $history.append($('<div/>').append($historyEntry));
+                        var $historyDiv = $('<div/>').addClass('history-entry').append($historyEntry);
+                        $history.append($historyDiv);
+
+                        if (history.length > historyViewLimit) {
+                            if (i + 1 > historyViewLimit - 1) {
+                                $historyDiv.hide();
+                            }
+                        }
+                    }
+
+                    if (history.length > historyViewLimit) {
+                        $history.append($('<a/>').addClass('more').text('ещё…').click(function () {
+                            $(this).hide().parent('.history').find('.history-entry').show();
+                        }));
                     }
 
                     $entry.toggleClass('deactivated-entry', !entry.isActive());

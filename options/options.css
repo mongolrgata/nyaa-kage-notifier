@@ -110,6 +110,10 @@ button, input {
     content: "Удалить запись";
 }
 
+.anime-name {
+    font-weight: bold;
+}
+
 .history {
     margin-left: 32px;
     font-size: 10px;
@@ -120,6 +124,20 @@ button, input {
     color: black;
     text-decoration: none;
     cursor: auto;
+}
+
+.history a.more {
+    color: #06c;
+    cursor: pointer;
+}
+
+.history a.more:hover {
+    color: #f63;
+    text-decoration: underline;
+}
+
+.entry:hover {
+    background-color: #EEF4FA;
 }
 
 .nyaa .history div,
