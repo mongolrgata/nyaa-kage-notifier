@@ -165,10 +165,10 @@ button, input {
     text-overflow: ellipsis;
 }
 
-.nyaa .history div:hover {
-    margin-left: 8px;
-    margin-right: -8px;
-}
+/*.nyaa .history div:hover {*/
+    /*margin-left: 8px;*/
+    /*margin-right: -8px;*/
+/*}*/
 
 /*.nyaa .history div:hover::before {*/
     /*content: "\2192";*/
