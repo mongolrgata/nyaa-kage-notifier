@@ -81,7 +81,8 @@ var WatchListEntry = function WatchListEntry(obj) {
  */
 WatchListEntry.prototype.ENTRY_TYPE = {
     NYAA : 'nyaa',
-    KAGE : 'kage'
+    KAGE : 'kage',
+    KAGEFORUM : 'kageForum'
 };
 
 /**
@@ -157,8 +158,10 @@ WatchListEntry.prototype.getAuthor = function getAuthor() {
             return /^(\[.*?])?/.exec(commonTitle)[0];
         case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
             return this._author;
+        case WatchListEntry.prototype.ENTRY_TYPE.KAGEFORUM:
+            return this._author;
         default:
-            return '';
+            return this._author;
     }
 };
 
@@ -173,8 +176,10 @@ WatchListEntry.prototype.getAnimeName = function getAnimeName() {
             return /^(\[.*?])?([^0-9]*)/.exec(commonTitle)[2].trim();
         case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
             return this._animeName;
+        case WatchListEntry.prototype.ENTRY_TYPE.KAGEFORUM:
+            return this._animeName;
         default:
-            return '';
+            return this._animeName;
     }
 };
 

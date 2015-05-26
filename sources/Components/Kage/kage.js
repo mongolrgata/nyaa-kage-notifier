@@ -18,11 +18,11 @@ $(document).ready(function () {
             var newEntry = new WatchListEntry({
                 _type      : WatchListEntry.prototype.ENTRY_TYPE.KAGE,
                 _active    : true,
-                _author    : getAuthor($element),
+                _author    : kageHelpers.getAuthor($element),
                 _animeName : animeName
             });
 
-            var historyEntry = kageHistoryEntry($element);
+            var historyEntry = kageHelpers.kageHistoryEntry($element);
 
             newEntry.insertHistoryEntry(historyEntry);
 

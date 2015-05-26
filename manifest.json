@@ -2,13 +2,14 @@
   "manifest_version": 2,
   "name": "Nyaa&Kage Notifier",
   "description": "Получай уведомления о появлении новых равок на nyaa.se и субтитров на fansubs.ru",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "background": {
     "scripts": [
       "sources/external/jquery-2.1.3.min.js",
       "sources/WatchListEntry/WatchListEntry.js",
-      "sources/nyaaHelpers.js",
-      "sources/kageHelpers.js",
+      "sources/Components/Nyaa/nyaaHelpers.js",
+      "sources/Components/Kage/kageHelpers.js",
+      "sources/Components/KageForum/kageForumHelpers.js",
       "sources/helpers.js",
       "background.js"
     ]
@@ -20,8 +21,8 @@
         "sources/external/jquery-2.1.3.min.js",
         "sources/helpers.js",
         "sources/WatchListEntry/WatchListEntry.js",
-        "sources/nyaaHelpers.js",
-        "sources/nyaa.js"
+        "sources/Components/Nyaa/nyaaHelpers.js",
+        "sources/Components/Nyaa/nyaa.js"
       ]
     },
     {
@@ -30,8 +31,18 @@
         "sources/external/jquery-2.1.3.min.js",
         "sources/helpers.js",
         "sources/WatchListEntry/WatchListEntry.js",
-        "sources/kageHelpers.js",
-        "sources/kage.js"
+        "sources/Components/Kage/kageHelpers.js",
+        "sources/Components/Kage/kage.js"
+      ]
+    },
+    {
+      "matches": ["http://www.fansubs.ru/forum/viewtopic.php?t=*"],
+      "js": [
+        "sources/external/jquery-2.1.3.min.js",
+        "sources/helpers.js",
+        "sources/WatchListEntry/WatchListEntry.js",
+        "sources/Components/KageForum/kageForumHelpers.js",
+        "sources/Components/KageForum/kageForum.js"
       ]
     }
   ],

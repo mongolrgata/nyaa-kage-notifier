@@ -198,126 +198,63 @@ button, input {
     z-index: 100500;
 }
 
-.my-pretty-load .center {
-    margin: auto;
-    position: absolute;
-    left: 0;
-    right: 0;
+.my-pretty-load .center-middle-screen {
+    position: fixed !important;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
-
-@-webkit-keyframes colorful {
+.my-pretty-load .livechart {
+    position: absolute;
+    height: 11px;
+    display: flex;
+    align-items: center;
+}
+.my-pretty-load .load-segment {
+    margin-left: 2px;
+    border: 1px solid #e0eefd;
+    width: 2px;
+    height: 5px;
+    background: #F4F9FD;
+    -webkit-animation: load 0.88s linear infinite;
+    animation: load 0.88s linear infinite;
+}
+.my-pretty-load .load-segment:first-child {
+    margin-left: 0;
+}
+@-webkit-keyframes load {
     0% {
-        background-color: #ad1c79;
+        height: 9px;
+        border-color: #3B97FC;
+        background-color: #5EA9FC;
+    }
+    37.5% {
+        height: 5px;
+        border-color: #E0EEFD;
+        background-color: #F4F9FD;
     }
 }
-
-.my-pretty-load .container {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    width: 44px;
-    height: 44px;
+@keyframes load {
+    0% {
+        height: 9px;
+        border-color: #3B97FC;
+        background-color: #5EA9FC;
+    }
+    37.5% {
+        height: 5px;
+        border-color: #E0EEFD;
+        background-color: #F4F9FD;
+    }
 }
-
-.my-pretty-load .base {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+.my-pretty-load .segment-1 {
+    -webkit-animation-delay: 0s;
+    animation-delay: 0s;
 }
-
-.my-pretty-load .rotate-1 {
-    transform: rotate(0deg);
+.my-pretty-load .segment-2 {
+    -webkit-animation-delay: 0.11s;
+    animation-delay: 0.11s;
 }
-
-.my-pretty-load .rotate-1 .tail,
-.my-pretty-load .rotate-1 .head {
-    -webkit-animation: colorful 1s 0s linear infinite;
-}
-
-.my-pretty-load .rotate-2 {
-    transform: rotate(45deg);
-}
-
-.my-pretty-load .rotate-2 .tail,
-.my-pretty-load .rotate-2 .head {
-    -webkit-animation: colorful 1s 0.125s linear infinite;
-}
-
-.my-pretty-load .rotate-3 {
-    transform: rotate(90deg);
-}
-
-.my-pretty-load .rotate-3 .tail,
-.my-pretty-load .rotate-3 .head {
-    -webkit-animation: colorful 1s 0.25s linear infinite;
-}
-
-.my-pretty-load .rotate-4 {
-    transform: rotate(135deg);
-}
-
-.my-pretty-load .rotate-4 .tail,
-.my-pretty-load .rotate-4 .head {
-    -webkit-animation: colorful 1s 0.375s linear infinite;
-}
-
-.my-pretty-load .rotate-5 {
-    transform: rotate(180deg);
-}
-
-.my-pretty-load .rotate-5 .tail,
-.my-pretty-load .rotate-5 .head {
-    -webkit-animation: colorful 1s 0.5s linear infinite;
-}
-
-.my-pretty-load .rotate-6 {
-    transform: rotate(225deg);
-}
-
-.my-pretty-load .rotate-6 .tail,
-.my-pretty-load .rotate-6 .head {
-    -webkit-animation: colorful 1s 0.625s linear infinite;
-}
-
-.my-pretty-load .rotate-7 {
-    transform: rotate(270deg);
-}
-
-.my-pretty-load .rotate-7 .tail,
-.my-pretty-load .rotate-7 .head {
-    -webkit-animation: colorful 1s 0.75s linear infinite;
-}
-
-.my-pretty-load .rotate-8 {
-    transform: rotate(315deg);
-}
-
-.my-pretty-load .rotate-8 .tail,
-.my-pretty-load .rotate-8 .head {
-    -webkit-animation: colorful 1s 0.875s linear infinite;
-}
-
-.my-pretty-load .drop {
-    width: 8px;
-    height: 12px;
-}
-
-.my-pretty-load .tail {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    /*noinspection CssFloatPxLength*/
-    -webkit-clip-path: polygon(4px 12px, 7.46410162px 6px, 0.53589838px 6px);
-    background-color: #db9dc5;
-}
-
-.my-pretty-load .head {
-    position: absolute;
-    border-radius: 50%;
-    width: 100%;
-    height: 8px;
-    background-color: #db9dc5;
+.my-pretty-load .segment-3 {
+    -webkit-animation-delay: 0.22s;
+    animation-delay: 0.22s;
 }

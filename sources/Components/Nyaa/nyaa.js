@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener(function () {
         _active : true
     });
 
-    var history = nyaaHistoryArray($('body'));
+    var history = nyaaHelpers.nyaaHistoryArray($('body'));
 
     for (var i = 0, n = history.length; i < n; ++i) {
         newEntry.insertHistoryEntry(history[i]);

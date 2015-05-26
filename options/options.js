@@ -54,7 +54,7 @@ function containsHistoryEntry(historyArray, historyEntry) {
 }
 
 function updateNyaaEntry(id, $html) {
-    var historyArray = nyaaHistoryArray($html);
+    var historyArray = nyaaHelpers.nyaaHistoryArray($html);
 
     chrome.storage.local.get(id, function (result) {
         var
@@ -81,7 +81,7 @@ function updateKageEntry(id, entry, $html) {
         $element = $html.find('input[name="srt"][value="' + srt + '"]').parent().find('input[alt="Скачать"]');
 
     var newHistoryEntry = new HistoryEntry({
-        _title  : getTitle($element),
+        _title  : kageHelpers.getTitle($element),
         _link   : link,
         _date   : '' + new Date(),
         _loaded : false
@@ -94,6 +94,27 @@ function updateKageEntry(id, entry, $html) {
 
         if (!containsHistoryEntry(oldHistory, newHistoryEntry)) {
             entry.insertHistoryEntry(newHistoryEntry);
+        }
+
+        var obj = {};
+        obj[id] = entry;
+
+        chrome.storage.local.set(obj);
+    });
+}
+
+function updateKageForumEntry(id, entry, $html) {
+    var historyArray = kageForumHelpers.kageForumHistoryArray($html);
+
+    chrome.storage.local.get(id, function (result) {
+        var
+              entry      = new WatchListEntry(result[id]),
+              oldHistory = entry.getHistory();
+
+        for (var i = 0, n = historyArray.length; i < n; ++i) {
+            if (!containsHistoryEntry(oldHistory, historyArray[i])) {
+                entry.insertHistoryEntry(historyArray[i]);
+            }
         }
 
         var obj = {};
@@ -118,6 +139,7 @@ $(document).ready(function () {
         $options             = $('input[name="options"]'),
         $nyaa                = $('.nyaa'),
         $kage                = $('.kage'),
+        $kageForum           = $('.kage-forum'),
         $dummy               = $('<div/>'),
         $load                = $('.my-pretty-load');
 
@@ -147,6 +169,9 @@ $(document).ready(function () {
                         break;
                     case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
                         updateKageEntry(link, entry, $html);
+                        break;
+                    case WatchListEntry.prototype.ENTRY_TYPE.KAGEFORUM:
+                        updateKageForumEntry(link, entry, $html);
                         break;
                 }
             });
@@ -250,6 +275,7 @@ $(document).ready(function () {
 
         $nyaa.empty();
         $kage.empty();
+        $kageForum.empty();
 
         chrome.storage.local.get(null, function (items) {
             for (var key in items) {
@@ -404,6 +430,8 @@ $(document).ready(function () {
                                 return $nyaa;
                             case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
                                 return $kage;
+                            case WatchListEntry.prototype.ENTRY_TYPE.KAGEFORUM:
+                                return $kageForum;    
                             default:
                                 return $dummy;
                         }

@@ -32,7 +32,7 @@ chrome.runtime.onInstalled.addListener(function () {
             {
                 conditions : [
                     new chrome.declarativeContent.PageStateMatcher({
-                        pageUrl : {queryContains : 'term'} // TODO change condition
+                        pageUrl : {queryContains : 'term'}
                     })
                 ],
 
@@ -74,7 +74,7 @@ function containsHistoryEntry(historyArray, historyEntry) {
 }
 
 function updateNyaaEntry(id, $html) {
-    var historyArray = nyaaHistoryArray($html);
+    var historyArray = nyaaHelpers.nyaaHistoryArray($html);
 
     chrome.storage.local.get(id, function (result) {
         var
@@ -113,7 +113,7 @@ function updateKageEntry(id, entry, $html) {
         $element = $html.find('input[name="srt"][value="' + srt + '"]').parent().find('input[alt="Скачать"]');
 
     var newHistoryEntry = new HistoryEntry({
-        _title  : getTitle($element),
+        _title  : kageHelpers.getTitle($element),
         _link   : link,
         _date   : '' + new Date(),
         _loaded : false
@@ -138,6 +138,39 @@ function updateKageEntry(id, entry, $html) {
                 },
                 debug.dummy
             );
+        }
+
+        var obj = {};
+        obj[id] = entry;
+
+        chrome.storage.local.set(obj);
+    });
+}
+
+function updateKageForumEntry(id, entry, $html) {
+    var historyArray = kageForumHelpers.kageForumHistoryArray($html);
+
+    chrome.storage.local.get(id, function (result) {
+        var
+              entry      = new WatchListEntry(result[id]),
+              oldHistory = entry.getHistory();
+
+        for (var i = 0, n = historyArray.length; i < n; ++i) {
+            if (!containsHistoryEntry(oldHistory, historyArray[i])) {
+                entry.insertHistoryEntry(historyArray[i]);
+
+                chrome.notifications.create(
+                      id, // notificationId
+                      {
+                          type           : 'basic',
+                          iconUrl        : debug.messIcoKage,
+                          title          : 'Новае сабы на форуме!',
+                          message        : historyArray[i].getTitle(),
+                          contextMessage : 'Кликни, чтобы перейти на страницу форума'
+                      },
+                      debug.dummy
+                );
+            }
         }
 
         var obj = {};
@@ -183,6 +216,9 @@ function setAlarm() {
                                     break;
                                 case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
                                     updateKageEntry(link, entry, $html);
+                                    break;
+                                case WatchListEntry.prototype.ENTRY_TYPE.KAGEFORUM:
+                                    updateKageForumEntry(link, entry, $html);
                                     break;
                             }
                         });
