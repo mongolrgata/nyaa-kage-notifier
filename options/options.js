@@ -103,13 +103,13 @@ function updateKageEntry(id, entry, $html) {
     });
 }
 
-function updateKageForumEntry(id, entry, $html) {
+function updateKageForumEntry(id, $html) {
     var historyArray = kageForumHelpers.kageForumHistoryArray($html);
 
     chrome.storage.local.get(id, function (result) {
         var
-              entry      = new WatchListEntry(result[id]),
-              oldHistory = entry.getHistory();
+            entry      = new WatchListEntry(result[id]),
+            oldHistory = entry.getHistory();
 
         for (var i = 0, n = historyArray.length; i < n; ++i) {
             if (!containsHistoryEntry(oldHistory, historyArray[i])) {
@@ -172,7 +172,7 @@ $(document).ready(function () {
                         updateKageEntry(link, entry, $html);
                         break;
                     case WatchListEntry.prototype.ENTRY_TYPE.KAGEFORUM:
-                        updateKageForumEntry(link, entry, $html);
+                        updateKageForumEntry(link, $html);
                         break;
                 }
             });
@@ -406,11 +406,13 @@ $(document).ready(function () {
                                 });
                             });
 
-                        var $historyDiv = $('<div/>').addClass('history-entry').append($historyEntry).prepend($('<span class="delete-history"></span>').hide().data({'key': key, 'historyKey': history[i].getTitle()}).click(function () {
+                        var $historyDiv = $('<div/>').addClass('history-entry').append($historyEntry).prepend($('<span class="delete-history"></span>').hide().data({'key' : key,
+                            'historyKey' : history[i].getTitle()
+                        }).click(function () {
                             var
-                                  $button = $(this),
-                                  id = $button.data('key'),
-                                  historyKey = $button.data('historyKey');
+                                $button    = $(this),
+                                id         = $button.data('key'),
+                                historyKey = $button.data('historyKey');
 
                             chrome.storage.local.get(id, function (result) {
                                 var entry = new WatchListEntry(result[id]);
@@ -454,7 +456,7 @@ $(document).ready(function () {
                             case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
                                 return $kage;
                             case WatchListEntry.prototype.ENTRY_TYPE.KAGEFORUM:
-                                return $kageForum;    
+                                return $kageForum;
                             default:
                                 return $dummy;
                         }

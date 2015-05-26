@@ -222,12 +222,14 @@ button, input {
     top: 50%;
     transform: translate(-50%, -50%);
 }
+
 .my-pretty-load .livechart {
     position: absolute;
     height: 11px;
     display: flex;
     align-items: center;
 }
+
 .my-pretty-load .load-segment {
     margin-left: 2px;
     border: 1px solid #e0eefd;
@@ -237,9 +239,11 @@ button, input {
     -webkit-animation: load 0.88s linear infinite;
     animation: load 0.88s linear infinite;
 }
+
 .my-pretty-load .load-segment:first-child {
     margin-left: 0;
 }
+
 @-webkit-keyframes load {
     0% {
         height: 9px;
@@ -252,6 +256,7 @@ button, input {
         background-color: #F4F9FD;
     }
 }
+
 @keyframes load {
     0% {
         height: 9px;
@@ -264,14 +269,17 @@ button, input {
         background-color: #F4F9FD;
     }
 }
+
 .my-pretty-load .segment-1 {
     -webkit-animation-delay: 0s;
     animation-delay: 0s;
 }
+
 .my-pretty-load .segment-2 {
     -webkit-animation-delay: 0.11s;
     animation-delay: 0.11s;
 }
+
 .my-pretty-load .segment-3 {
     -webkit-animation-delay: 0.22s;
     animation-delay: 0.22s;

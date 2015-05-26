@@ -147,28 +147,28 @@ function updateKageEntry(id, entry, $html) {
     });
 }
 
-function updateKageForumEntry(id, entry, $html) {
+function updateKageForumEntry(id, $html) {
     var historyArray = kageForumHelpers.kageForumHistoryArray($html);
 
     chrome.storage.local.get(id, function (result) {
         var
-              entry      = new WatchListEntry(result[id]),
-              oldHistory = entry.getHistory();
+            entry      = new WatchListEntry(result[id]),
+            oldHistory = entry.getHistory();
 
         for (var i = 0, n = historyArray.length; i < n; ++i) {
             if (!containsHistoryEntry(oldHistory, historyArray[i])) {
                 entry.insertHistoryEntry(historyArray[i]);
 
                 chrome.notifications.create(
-                      id, // notificationId
-                      {
-                          type           : 'basic',
-                          iconUrl        : debug.messIcoKage,
-                          title          : 'Новае сабы на форуме!',
-                          message        : historyArray[i].getTitle(),
-                          contextMessage : 'Кликни, чтобы перейти на страницу форума'
-                      },
-                      debug.dummy
+                    id, // notificationId
+                    {
+                        type           : 'basic',
+                        iconUrl        : debug.messIcoKage,
+                        title          : 'Новае сабы на форуме!',
+                        message        : historyArray[i].getTitle(),
+                        contextMessage : 'Кликни, чтобы перейти на страницу форума'
+                    },
+                    debug.dummy
                 );
             }
         }
@@ -218,7 +218,7 @@ function setAlarm() {
                                     updateKageEntry(link, entry, $html);
                                     break;
                                 case WatchListEntry.prototype.ENTRY_TYPE.KAGEFORUM:
-                                    updateKageForumEntry(link, entry, $html);
+                                    updateKageForumEntry(link, $html);
                                     break;
                             }
                         });

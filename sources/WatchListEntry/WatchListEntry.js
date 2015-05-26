@@ -36,7 +36,7 @@ HistoryEntry.prototype.setLoaded = function setLoaded() {
 HistoryEntry.prototype.isNew = function isNew() {
     var today = new Date();
 
-    return !this._forceOld && (today.setDate(today.getDate() - 2) < Date.parse(this._date));
+    return !this._forceOld && (today.setDate(today.getDate() - 7) < Date.parse(this._date));
 };
 
 /**
@@ -80,8 +80,8 @@ var WatchListEntry = function WatchListEntry(obj) {
  * @type {{NYAA: string, KAGE: string}}
  */
 WatchListEntry.prototype.ENTRY_TYPE = {
-    NYAA : 'nyaa',
-    KAGE : 'kage',
+    NYAA      : 'nyaa',
+    KAGE      : 'kage',
     KAGEFORUM : 'kageForum'
 };
 
