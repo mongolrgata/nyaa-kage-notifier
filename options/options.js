@@ -109,13 +109,16 @@ function updateKageForumEntry(id, $html) {
     chrome.storage.local.get(id, function (result) {
         var
             entry      = new WatchListEntry(result[id]),
-            oldHistory = entry.getHistory();
+            oldHistory = entry.getHistory(),
+            newName = kageForumHelpers.getAnimeName($html);
 
         for (var i = 0, n = historyArray.length; i < n; ++i) {
             if (!containsHistoryEntry(oldHistory, historyArray[i])) {
                 entry.insertHistoryEntry(historyArray[i]);
             }
         }
+
+        entry.setAnimeName(newName);
 
         var obj = {};
         obj[id] = entry;

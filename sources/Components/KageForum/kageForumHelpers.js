@@ -26,7 +26,7 @@ var kageForumHelpers = {
      * @returns {string}
      */
     getLink : function getLink($element) {
-        return $element.prop('href');
+        return 'http://www.fansubs.ru/forum/' + $element.attr('href').replace(/^\.\//, '');
     },
 
     /**

@@ -153,25 +153,28 @@ function updateKageForumEntry(id, $html) {
     chrome.storage.local.get(id, function (result) {
         var
             entry      = new WatchListEntry(result[id]),
-            oldHistory = entry.getHistory();
+            oldHistory = entry.getHistory(),
+            newName = kageForumHelpers.getAnimeName($html);
 
         for (var i = 0, n = historyArray.length; i < n; ++i) {
             if (!containsHistoryEntry(oldHistory, historyArray[i])) {
                 entry.insertHistoryEntry(historyArray[i]);
 
                 chrome.notifications.create(
-                    id, // notificationId
+                    historyArray[i].getLink(), // notificationId
                     {
                         type           : 'basic',
                         iconUrl        : debug.messIcoKage,
-                        title          : 'Новае сабы на форуме!',
+                        title          : 'Новые сабы на форуме!',
                         message        : historyArray[i].getTitle(),
-                        contextMessage : 'Кликни, чтобы перейти на страницу форума'
+                        contextMessage : 'Кликни, чтобы скачать'
                     },
                     debug.dummy
                 );
             }
         }
+
+        entry.setAnimeName(newName);
 
         var obj = {};
         obj[id] = entry;

@@ -8,6 +8,7 @@ var HistoryEntry = function HistoryEntry(obj) {
     this._date = obj._date;
     this._loaded = obj._loaded;
     this._forceOld = obj._forceOld;
+    this._forceName = obj._forceName;
 };
 
 /**
@@ -184,6 +185,19 @@ WatchListEntry.prototype.getAnimeName = function getAnimeName() {
 };
 
 /**
+ *
+ * @param newName
+ * @param {boolean} [isForce]
+ */
+WatchListEntry.prototype.setAnimeName = function setAnimeName(newName, isForce) {
+    this._animeName = newName;
+
+    if (isForce) {
+        this._forceName = true;
+    }
+};
+
+/**
  * @returns {HistoryEntry[]}
  */
 WatchListEntry.prototype.getHistory = function getHistory() {
@@ -196,7 +210,15 @@ WatchListEntry.prototype.getHistory = function getHistory() {
     }
 
     result.sort(function (a, b) {
-        return a.getLink() > b.getLink() ? -1 : 1;
+        var
+              aNew = a.isNew(),
+              bNew = b.isNew();
+
+        if (aNew == bNew) {
+            return a.getLink() > b.getLink() ? -1 : 1;
+        }
+
+        return aNew ? -1 : 1;
     });
 
     return result;
