@@ -18,6 +18,19 @@ button, input {
     display: none;
 }
 
+.delete-history {
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    background-color: indigo;
+}
+
+.long-button {
+    width: 396px;
+    margin-right: 20px; /* fix thin window */
+}
+
 #optionString {
     max-width: 196px;
     display: inline-block;
@@ -140,10 +153,10 @@ button, input {
     background-color: #EEF4FA;
 }
 
-.nyaa .history div,
-.nyaa .history div:hover {
-    transition: margin 0.08s;
-}
+/*.nyaa .history div,*/
+/*.nyaa .history div:hover {*/
+    /*transition: margin 0.08s;*/
+/*}*/
 
 .nyaa .history div {
     cursor: pointer;
@@ -157,12 +170,17 @@ button, input {
     margin-right: -8px;
 }
 
-.nyaa .history div:hover::before {
-    content: "\2192";
-    margin-left: -10px;
-    width: 10px;
-    display: inline-block;
-    color: blue;
+/*.nyaa .history div:hover::before {*/
+    /*content: "\2192";*/
+    /*margin-left: -10px;*/
+    /*width: 10px;*/
+    /*display: inline-block;*/
+    /*color: blue;*/
+/*}*/
+
+.nyaa .history a:hover {
+    color: #FF7033;
+    text-decoration: underline;
 }
 
 .kage .history div:nth-child(1) a {

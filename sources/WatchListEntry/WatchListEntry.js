@@ -212,6 +212,13 @@ WatchListEntry.prototype.insertHistoryEntry = function insertHistoryEntry(histor
 /**
  * @param {string} historyKey
  */
+WatchListEntry.prototype.deleteHistoryEntry = function deleteHistoryEntry(historyKey) {
+    delete this._history[historyKey];
+};
+
+/**
+ * @param {string} historyKey
+ */
 WatchListEntry.prototype.setLoadedHistoryEntry = function setLoadedHistoryEntry(historyKey) {
     if (this._history.hasOwnProperty(historyKey)) {
         this._history[historyKey].setLoaded();

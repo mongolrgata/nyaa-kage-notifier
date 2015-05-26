@@ -135,6 +135,7 @@ $(document).ready(function () {
         $buttonDeactivateAll = $('button.deactivate-all'),
         $buttonUnnewAll      = $('button.unnew-all'),
         $buttonLoadedAll     = $('button.loaded-all'),
+        $buttonAllowDelete   = $('button.allow-delete-history'),
         $optionString        = $('#optionString'),
         $options             = $('input[name="options"]'),
         $nyaa                = $('.nyaa'),
@@ -265,6 +266,10 @@ $(document).ready(function () {
 
             repaintWatchList();
         });
+    });
+
+    $buttonAllowDelete.click(function () {
+        $('.delete-history').show();
     });
 
     var repaintWatchList = function () {
@@ -401,7 +406,25 @@ $(document).ready(function () {
                                 });
                             });
 
-                        var $historyDiv = $('<div/>').addClass('history-entry').append($historyEntry);
+                        var $historyDiv = $('<div/>').addClass('history-entry').append($historyEntry).prepend($('<span class="delete-history"></span>').hide().data({'key': key, 'historyKey': history[i].getTitle()}).click(function () {
+                            var
+                                  $button = $(this),
+                                  id = $button.data('key'),
+                                  historyKey = $button.data('historyKey');
+
+                            chrome.storage.local.get(id, function (result) {
+                                var entry = new WatchListEntry(result[id]);
+
+                                entry.deleteHistoryEntry(historyKey);
+
+                                var obj = {};
+                                obj[id] = entry;
+
+                                chrome.storage.local.set(obj);
+
+                                $button.parent().remove();
+                            });
+                        }));
                         $history.append($historyDiv);
 
                         if (history.length > historyViewLimit) {
