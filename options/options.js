@@ -139,6 +139,8 @@ $(document).ready(function () {
         $buttonUnnewAll      = $('button.unnew-all'),
         $buttonLoadedAll     = $('button.loaded-all'),
         $buttonAllowDelete   = $('button.allow-delete-history'),
+        $buttonExpandAll     = $('button.expand-all-history'),
+        $buttonHideOver      = $('button.hide-over-history'),
         $optionString        = $('#optionString'),
         $options             = $('input[name="options"]'),
         $nyaa                = $('.nyaa'),
@@ -273,6 +275,15 @@ $(document).ready(function () {
 
     $buttonAllowDelete.click(function () {
         $('.delete-history').show();
+    });
+
+    $buttonExpandAll.click(function () {
+        $('.more').click();
+    });
+
+    $buttonHideOver.click(function () {
+        $('.more').show();
+        $('.over-history').hide();
     });
 
     var repaintWatchList = function () {
@@ -434,7 +445,7 @@ $(document).ready(function () {
 
                         if (history.length > historyViewLimit) {
                             if (i + 1 > historyViewLimit - 1) {
-                                $historyDiv.hide();
+                                $historyDiv.addClass('over-history').hide();
                             }
                         }
                     }

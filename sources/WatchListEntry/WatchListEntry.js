@@ -19,6 +19,13 @@ HistoryEntry.prototype.getTitle = function getTitle() {
 };
 
 /**
+ * @returns {string}
+ */
+HistoryEntry.prototype.getDate = function getDate() {
+    return this._date;
+};
+
+/**
  * @returns {boolean}
  */
 HistoryEntry.prototype.wasLoaded = function wasLoaded() {
@@ -212,13 +219,23 @@ WatchListEntry.prototype.getHistory = function getHistory() {
     result.sort(function (a, b) {
         var
               aNew = a.isNew(),
-              bNew = b.isNew();
+              bNew = b.isNew(),
+              aDate = new Date(a.getDate()),
+              bDate = new Date(b.getDate());
 
-        if (aNew == bNew) {
-            return a.getLink() > b.getLink() ? -1 : 1;
+        if (aNew != bNew) {
+            return aNew ? -1 : 1;
         }
 
-        return aNew ? -1 : 1;
+        if (aDate != bDate) {
+            return aDate < bDate ? 1 : -1;
+        }
+
+        if (a.getLink() != b.getLink()) {
+            return a.getLink() < b.getLink() ? 1 : -1;
+        }
+
+        return a.getTitle() < b.getTitle() ? 1 : -1;
     });
 
     return result;
