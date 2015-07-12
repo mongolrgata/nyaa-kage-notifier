@@ -227,7 +227,7 @@ WatchListEntry.prototype.getHistory = function getHistory() {
             return aNew ? -1 : 1;
         }
 
-        if (aDate != bDate) {
+        if (aDate.valueOf() != bDate.valueOf()) {
             return aDate < bDate ? 1 : -1;
         }
 
