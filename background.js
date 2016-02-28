@@ -23,6 +23,8 @@ var debug = {
     }
 };
 
+var POST_PREFIX = 'https://api.telegram.org/bot154974539:AAF8nXW5uGFjjbYDJQ7aw8NPb_uKjRbIBfY/sendMessage?parse_mode=Markdown&chat_id=120641764&text=';
+
 // Some magic here... i dunno lol
 chrome.runtime.onInstalled.addListener(function () {
     //noinspection JSUnresolvedVariable
@@ -45,6 +47,15 @@ chrome.runtime.onInstalled.addListener(function () {
 chrome.pageAction.onClicked.addListener(function (tab) {
     chrome.tabs.sendMessage(tab.id, {});
 });
+
+function createMessage(title, link, message) {
+    var result = encodeURIComponent(
+        '*' + title + '*\n' +
+        '`' + message + '` ' + link
+    );
+
+    return result;
+}
 
 function setIntervalArray(foo, delay, array, callback) {
     var cnt = 0;
@@ -84,6 +95,8 @@ function updateNyaaEntry(id, $html) {
         for (var i = 0, n = historyArray.length; i < n; ++i) {
             if (!containsHistoryEntry(oldHistory, historyArray[i])) {
                 entry.insertHistoryEntry(historyArray[i]);
+
+                $.post(POST_PREFIX + createMessage(historyArray[i].getTitle(), historyArray[i].getLink(), 'Новая равка:'));
 
                 chrome.notifications.create(
                     historyArray[i].getLink(), // notificationId
@@ -127,6 +140,8 @@ function updateKageEntry(id, entry, $html) {
         if (!containsHistoryEntry(oldHistory, newHistoryEntry)) {
             entry.insertHistoryEntry(newHistoryEntry);
 
+            $.post(POST_PREFIX + createMessage(entry.getAnimeName(), newHistoryEntry.getLink(), 'Новые сабы (' + newHistoryEntry.getTitle() + '):'));
+
             chrome.notifications.create(
                 newHistoryEntry.getLink(), // notificationId
                 {
@@ -159,6 +174,8 @@ function updateKageForumEntry(id, $html) {
         for (var i = 0, n = historyArray.length; i < n; ++i) {
             if (!containsHistoryEntry(oldHistory, historyArray[i])) {
                 entry.insertHistoryEntry(historyArray[i]);
+
+                $.post(POST_PREFIX + createMessage(historyArray[i].getTitle(), historyArray[i].getLink(), 'Новые сабы:'));
 
                 chrome.notifications.create(
                     historyArray[i].getLink(), // notificationId

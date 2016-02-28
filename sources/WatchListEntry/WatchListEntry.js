@@ -9,6 +9,7 @@ var HistoryEntry = function HistoryEntry(obj) {
     this._loaded = obj._loaded;
     this._forceOld = obj._forceOld;
     this._forceName = obj._forceName;
+    this._episodeNumber = obj._episodeNumber;
 };
 
 /**
@@ -23,6 +24,10 @@ HistoryEntry.prototype.getTitle = function getTitle() {
  */
 HistoryEntry.prototype.getDate = function getDate() {
     return this._date;
+};
+
+HistoryEntry.prototype.getEpisodeNumber = function getEpisodeNumber() {
+    return this._episodeNumber;
 };
 
 /**
