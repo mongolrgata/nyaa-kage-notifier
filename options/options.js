@@ -139,6 +139,7 @@ $(document).ready(function () {
         $buttonUnnewAll      = $('button.unnew-all'),
         $buttonLoadedAll     = $('button.loaded-all'),
         $buttonAllowDelete   = $('button.allow-delete-history'),
+        $generateSchedule    = $('button.generate-schedule'),
         $buttonExpandAll     = $('button.expand-all-history'),
         $buttonHideOver      = $('button.hide-over-history'),
         $optionString        = $('#optionString'),
@@ -275,6 +276,12 @@ $(document).ready(function () {
 
     $buttonAllowDelete.click(function () {
         $('.delete-history').show();
+    });
+
+    $generateSchedule.click(function() {
+        chrome.tabs.create({
+            url: '/pages/schedule.html'
+        });
     });
 
     $buttonExpandAll.click(function () {
