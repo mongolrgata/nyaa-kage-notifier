@@ -11,10 +11,15 @@ var nyaaHelpers = {
 
         $rows.each(function (index, element) {
             var $row = $(element);
+            var link = $row.find('.tlistdownload a')[0];
+
+            if (link.protocol === 'chrome-extension:') {
+                link.protocol = 'http:';
+            }
 
             var historyEntry = new HistoryEntry({
                 _title  : $row.find('.tlistname').text().trim(),
-                _link   : $row.find('.tlistdownload a')[0].href,
+                _link   : link.href,
                 _date   : '' + new Date(),
                 _loaded : false
             });
