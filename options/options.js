@@ -297,7 +297,38 @@ $(document).ready(function () {
         $kageForum.empty();
 
         chrome.storage.local.get(null, function (items) {
+            var keys = [];
             for (var key in items) {
+                if (items.hasOwnProperty(key)) {
+                    keys.push(key)
+                }
+            }
+
+            keys.sort(
+               /**
+                * @param {string} keyA
+                * @param {string} keyB
+                */
+               function(keyA, keyB) {
+                   var a = new WatchListEntry(items[keyA]);
+                   var b = new WatchListEntry(items[keyB]);
+
+                   a = a.getAnimeName();
+                   b = b.getAnimeName();
+
+                   if (a < b) {
+                       return -1;
+                   } else if (a > b) {
+                       return +1;
+                   }
+
+                   return 0;
+               }
+            );
+
+            for (var keyCount = 0; keyCount < keys.length; ++keyCount) {
+                key = keys[keyCount];
+
                 if (items.hasOwnProperty(key)) {
                     var
                         entry   = new WatchListEntry(items[key]),
