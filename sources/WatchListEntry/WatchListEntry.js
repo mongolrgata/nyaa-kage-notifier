@@ -118,7 +118,59 @@ WatchListEntry.prototype._getHistoryTitles = function _getHistoryTitles() {
  * @returns {string}
  * @private
  */
-WatchListEntry.prototype._getCommonTitle = function _getCommonTitle() {
+WatchListEntry.prototype._getCommonTitle = function _getCommonTitle(isHardMode) {
+    function DP(s1, s2) {
+        var l1 = s1.length;
+        var l2 = s2.length;
+        var A = [];
+
+        for (var i = 0; i < l1 + 10; ++i) {
+            A.push(new Array(l2 + 10));
+        }
+
+        function foo(p1, p2) {
+           if (p1 === l1 && p2 === l2) {
+              return [0, ''];
+           }
+
+           if (A[p1][p2]) {
+              return A[p1][p2];
+           }
+
+           var maxCommonLength = -Infinity;
+           var commonString = null;
+           var fooRes = [];
+
+           if (p1 < l1) {
+              fooRes[1] = foo(p1 + 1, p2);
+           }
+           if (p2 < l2) {
+              fooRes[2] = foo(p1, p2 + 1);
+           }
+           if (p1 < l1 && p2 < l2) {
+              fooRes[3] = foo(p1 + 1, p2 + 1);
+
+              if (s1[p1] === s2[p2]) {
+                 ++fooRes[3][0];
+                 fooRes[3][1] = s1[p1] + fooRes[3][1];
+              }
+           }
+
+           for (var j = 0; j < fooRes.length; ++j) {
+              if (fooRes[j] && maxCommonLength < fooRes[j][0]) {
+                 maxCommonLength = fooRes[j][0];
+                 commonString = fooRes[j][1];
+              }
+           }
+
+           A[p1][p2] = [maxCommonLength, commonString];
+
+           return A[p1][p2];
+        }
+
+        return foo(0, 0)[1];
+    }
+
     var titles = this._getHistoryTitles();
 
     if (titles.length == 0) {
@@ -128,11 +180,15 @@ WatchListEntry.prototype._getCommonTitle = function _getCommonTitle() {
     var result = titles[0];
 
     for (var i = 0, n = titles.length; i < n; ++i) {
-        for (var j = 0, m = Math.min(result.length, titles[i].length); j < m; ++j) {
-            if (result[j] != titles[i][j]) {
-                result = result.substring(0, j);
-                break;
-            }
+        if (!isHardMode) {
+           for (var j = 0, m = Math.min(result.length, titles[i].length); j < m; ++j) {
+              if (result[j] != titles[i][j]) {
+                 result = result.substring(0, j);
+                 break;
+              }
+           }
+        } else {
+           result = DP(result, titles[i]);
         }
     }
 
@@ -181,12 +237,18 @@ WatchListEntry.prototype.getAuthor = function getAuthor() {
 /**
  * @returns {string}
  */
-WatchListEntry.prototype.getAnimeName = function getAnimeName() {
+WatchListEntry.prototype.getAnimeName = function getAnimeName(isHardMode) {
     switch (this.getType()) {
         case WatchListEntry.prototype.ENTRY_TYPE.NYAA:
-            var commonTitle = this._getCommonTitle();
+            var commonTitle = this._getCommonTitle(isHardMode);
+            var reExec = /^(\[.*?])?(.*?)((-|\[).*)/.exec(commonTitle);
+            var animeName = reExec[2] || '';
 
-            return /^(\[.*?])?([^0-9]*)/.exec(commonTitle)[2].trim();
+            if (!isHardMode) {
+               return /^(\[.*?])?([^0-9]*)/.exec(commonTitle)[2].trim();
+            } else {
+               return animeName.trim();
+            }
         case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
             return this._animeName;
         case WatchListEntry.prototype.ENTRY_TYPE.KAGEFORUM:
