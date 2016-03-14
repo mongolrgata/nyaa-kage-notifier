@@ -119,56 +119,39 @@ WatchListEntry.prototype._getHistoryTitles = function _getHistoryTitles() {
  * @private
  */
 WatchListEntry.prototype._getCommonTitle = function _getCommonTitle(isHardMode) {
-    function DP(s1, s2) {
+    isHardMode = true;
+    function findMaxCommonSubstring(s1, s2) {
         var l1 = s1.length;
         var l2 = s2.length;
-        var A = [];
 
-        for (var i = 0; i < l1 + 10; ++i) {
-            A.push(new Array(l2 + 10));
+        var A = new Array(l1);
+        for (var cnt = 0; cnt < A.length; ++cnt) {
+            A[cnt] = new Array();
         }
 
-        function foo(p1, p2) {
-           if (p1 === l1 && p2 === l2) {
-              return [0, ''];
-           }
-
-           if (A[p1][p2]) {
-              return A[p1][p2];
-           }
-
-           var maxCommonLength = -Infinity;
-           var commonString = null;
-           var fooRes = [];
-
-           if (p1 < l1) {
-              fooRes[1] = foo(p1 + 1, p2);
-           }
-           if (p2 < l2) {
-              fooRes[2] = foo(p1, p2 + 1);
-           }
-           if (p1 < l1 && p2 < l2) {
-              fooRes[3] = foo(p1 + 1, p2 + 1);
-
-              if (s1[p1] === s2[p2]) {
-                 ++fooRes[3][0];
-                 fooRes[3][1] = s1[p1] + fooRes[3][1];
-              }
-           }
-
-           for (var j = 0; j < fooRes.length; ++j) {
-              if (fooRes[j] && maxCommonLength < fooRes[j][0]) {
-                 maxCommonLength = fooRes[j][0];
-                 commonString = fooRes[j][1];
-              }
-           }
-
-           A[p1][p2] = [maxCommonLength, commonString];
-
-           return A[p1][p2];
+        function dp(p1, p2) {
+            return p1 === l1 || p2 === l2 ? 0 : A[p1][p2] || (A[p1][p2] = s1[p1] === s2[p2] ? 1 + dp(p1 + 1, p2 + 1) : Math.max(dp(p1, p2 + 1), dp(p1 + 1, p2)));
         }
 
-        return foo(0, 0)[1];
+        var commonSubstringLength = dp(0, 0);
+        var result = '';
+
+        for (var i = 0, j = 0; result.length < commonSubstringLength;) {
+            if (s1[i] === s2[j]) {
+                result += s1[i];
+                i++;
+                j++;
+                continue;
+            }
+
+            if (i + 1 < l1 && A[i][j] === A[i + 1][j]) {
+                i++;
+            } else {
+                j++;
+            }
+        }
+
+        return result;
     }
 
     var titles = this._getHistoryTitles();
@@ -179,16 +162,16 @@ WatchListEntry.prototype._getCommonTitle = function _getCommonTitle(isHardMode) 
 
     var result = titles[0];
 
-    for (var i = 0, n = titles.length; i < n; ++i) {
+    for (var i = 0, n = titles.length; i < n && i < 2; ++i) {
         if (!isHardMode) {
-           for (var j = 0, m = Math.min(result.length, titles[i].length); j < m; ++j) {
-              if (result[j] != titles[i][j]) {
-                 result = result.substring(0, j);
-                 break;
-              }
-           }
+            for (var j = 0, m = Math.min(result.length, titles[i].length); j < m; ++j) {
+                if (result[j] != titles[i][j]) {
+                    result = result.substring(0, j);
+                    break;
+                }
+            }
         } else {
-           result = DP(result, titles[i]);
+            result = findMaxCommonSubstring(result, titles[i]);
         }
     }
 
@@ -245,9 +228,9 @@ WatchListEntry.prototype.getAnimeName = function getAnimeName(isHardMode) {
             var animeName = reExec[2] || '';
 
             if (!isHardMode) {
-               return /^(\[.*?])?([^0-9]*)/.exec(commonTitle)[2].trim();
+                return /^(\[.*?])?([^0-9]*)/.exec(commonTitle)[2].trim();
             } else {
-               return animeName.trim();
+                return animeName.trim();
             }
         case WatchListEntry.prototype.ENTRY_TYPE.KAGE:
             return this._animeName;
@@ -285,10 +268,10 @@ WatchListEntry.prototype.getHistory = function getHistory() {
 
     result.sort(function (a, b) {
         var
-              aNew = a.isNew(),
-              bNew = b.isNew(),
-              aDate = new Date(a.getDate()),
-              bDate = new Date(b.getDate());
+            aNew = a.isNew(),
+            bNew = b.isNew(),
+            aDate = new Date(a.getDate()),
+            bDate = new Date(b.getDate());
 
         if (aNew != bNew) {
             return aNew ? -1 : 1;
